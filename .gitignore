@@ -1,0 +1,12 @@
+# OS Files
+*.swp
+*~
+._*
+.DS_Store
+*.ipr
+*.iml
+*.iws
+.idea/
+
+# Vendor
+vendor
