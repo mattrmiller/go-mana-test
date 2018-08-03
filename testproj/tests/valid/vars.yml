@@ -1,0 +1,8 @@
+name: Simple Api Example File
+url: "http://{{globals.HOST}.slack.com"
+method: GET
+headers:
+  - key: User-Agent
+    value: go-mana-test
+  - key: User-Agent-2
+    value: "{{globals.USERAGENT}"

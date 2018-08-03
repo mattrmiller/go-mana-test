@@ -1,14 +1,13 @@
 # go-mana-test
-The Make Apis Nice Again. Testing framework
+The Make Apis Nice Again. Testing framework.
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/mattrmiller/go-mana-test)](https://goreportcard.com/report/github.com/mattrmiller/go-mana-tet)
 [![godocs](https://img.shields.io/badge/godocs-reference-blue.svg)](https://godoc.org/github.com/mattrmiller/go-mana-test)
 
-# Mission Statement
+## Mission Statement
 The Make Apis Nice Again. This is a testing framework to help you quickly, and neatly write end to end tests for your Api.
 
-
-# Install
+## Install
 ```
 go get github.com/mattrmiller/go-mana-test
 ```
@@ -19,22 +18,14 @@ import (
 )
 ```
 
-# Rules For Contributing
-- Please make sure all changed files are run through gofmt
-- Submit a PR for review
-- Your name will be added below to Contributors
+## Contributing
+See the [Contributing Guide](/CONTRIBUTING.md) for steps on how to contribute to this project.
 
-# Helpful Bash Additions
-Test recursively, all go tests, in current folder:
-```
-alias go-testall='go test $(go list ./... | grep -v vendor)'
-```
-
-# Author
+## Author
 [Matthew R. Miller](https://github.com/mattrmiller)
 
-# Contributors
+## Contributors
 [Matthew R. Miller](https://github.com/mattrmiller)
 
-# License
+## License
 [MIT License](LICENSE)

@@ -1,0 +1,8 @@
+name: Simple Api Example File
+url: http://api.slack.com
+method: GET
+headers:
+  - key: User-Agent
+    value: go-mana-test
+  - key: Content-Type
+    value: application/json

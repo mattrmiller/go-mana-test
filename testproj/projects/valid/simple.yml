@@ -1,0 +1,5 @@
+name: Test Project
+tests: ./tests
+globals:
+  - key: URL_API
+    value: http://api.slack.com
