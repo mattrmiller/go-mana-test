@@ -26,7 +26,7 @@ func TestValidateMethod(tst *testing.T) {
 		"patch",
 	}
 	for _, method := range methods {
-		valid := ValidateMethod(method)
+		valid := ValidateMethod(&method)
 		brtesting.AssertEqual(tst, valid, true, "ValidateMethod failed for valid methods")
 	}
 
@@ -38,7 +38,7 @@ func TestValidateMethod(tst *testing.T) {
 		"ddddsdfsd",
 	}
 	for _, method := range methods {
-		valid := ValidateMethod(method)
+		valid := ValidateMethod(&method)
 		brtesting.AssertEqual(tst, valid, false, "ValidateMethod failed for invalid methods")
 	}
 }

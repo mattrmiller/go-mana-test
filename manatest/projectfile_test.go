@@ -13,8 +13,8 @@ func TestReadProjectFile(tst *testing.T) {
 
 	// Valid files
 	files := []string{
-		"../testproj/projects/valid/simple.yml",
 		"../testproj/projects/valid/noglobals.yml",
+		"../testproj/projects/valid/simple.yml",
 	}
 	for _, file := range files {
 		projFile, err := ReadProjectFile(file)

@@ -13,7 +13,12 @@ func TestReadTestFile(tst *testing.T) {
 
 	// Valid files
 	files := []string{
+		"../testproj/tests/valid/checks.yml",
+		"../testproj/tests/valid/headers.yml",
+		"../testproj/tests/valid/nochecks.yml",
+		"../testproj/tests/valid/noheaders.yml",
 		"../testproj/tests/valid/simple.yml",
+		"../testproj/tests/valid/vars.yml",
 	}
 	for _, file := range files {
 		testFile, err := ReadTestFile(file)
@@ -23,9 +28,12 @@ func TestReadTestFile(tst *testing.T) {
 
 	// Invalid files
 	files = []string{
+		"../testproj/tests/invalid/invalidcheck1.yml",
+		"../testproj/tests/invalid/invalidcheck2.yml",
+		"../testproj/tests/invalid/invalidheaders.yml",
+		"../testproj/tests/invalid/nomethod.yml",
 		"../testproj/tests/invalid/noname.yml",
 		"../testproj/tests/invalid/nourl.yml",
-		"../testproj/tests/invalid/nomethod.yml",
 	}
 	for _, file := range files {
 		testFile, err := ReadTestFile(file)

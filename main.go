@@ -21,7 +21,7 @@ const (
 func main() {
 
 	// Setup app
-	app := cli.App(APP_NAME, "The Make Apis Nice Again. Testing framework.")
+	app := cli.App(APP_NAME, "Making APIs Nice Again - Testing Framework")
 	verbose := app.BoolOpt("v verbose", false, "Verbose mode")
 
 	// Handle verbose mode
@@ -33,7 +33,6 @@ func main() {
 
 	// Define our command
 	app.Command("version", "Shows version info", cmdVersion)
-	app.Command("validate", "Validate tests", cmdValidate)
 	app.Command("test", "Run tests", cmdTest)
 
 	// Run commands
@@ -51,13 +50,14 @@ func cmdVersion(cmd *cli.Cmd) {
 	}
 }
 
-// cmdValidate Validates tests
-func cmdValidate(cmd *cli.Cmd) {
+// cmdTest Run tests
+func cmdTest(cmd *cli.Cmd) {
 
 	// Arguments
-	cmd.Spec = "PATH"
+	cmd.Spec = "PATH [ -d ]"
 	var (
 		pathProj = cmd.StringArg("PATH", "", "Path to project")
+		dryRun   = cmd.BoolOpt("d dryrun", false, "Dry run, only validates test files.")
 	)
 
 	// Action
@@ -90,53 +90,19 @@ func cmdValidate(cmd *cli.Cmd) {
 			if err != nil {
 				console.Print(fmt.Sprintf("Error in test file: %s\n\t%s", fileTest.GetFilePath(), err))
 			}
-		}
-
-		// Success
-		console.Print(fmt.Sprintf("All %d test files validated!", len(testFiles)))
-	}
-}
-
-// cmdTest Run tests
-func cmdTest(cmd *cli.Cmd) {
-
-	// Arguments
-	cmd.Spec = "PATH"
-	var (
-		pathProj = cmd.StringArg("PATH", "", "Path to project")
-	)
-
-	// Action
-	cmd.Action = func() {
-
-		// Read project file
-		projFile, err := manatest.ReadProjectFile(*pathProj)
-		if err != nil {
-			console.Print(fmt.Sprintf("%s\n", err))
-			os.Exit(1)
-		}
-		err = projFile.Validate()
-		if err != nil {
-			console.Print(fmt.Sprintf("Error in project file: %s\n\t%s", *pathProj, err))
-		}
-
-		// Gather test files
-		pathTests := path.Join(projFile.GetPath(), projFile.Tests)
-		testFiles, err := manatest.GatherTestFiles(pathTests)
-		if err != nil {
-			console.Print(fmt.Sprintf("%s\n", err))
-			os.Exit(1)
-		}
-
-		// Validate all files
-		for _, fileTest := range testFiles {
 
 			// Run the test file
-			err = fileTest.Test(projFile)
-			if err != nil {
-				console.Print(fmt.Sprintf("Error running test file: %s\n\t%s", fileTest.GetFilePath(), err))
+			if !*dryRun {
+				err = fileTest.Test(projFile)
+				if err != nil {
+					console.Print(fmt.Sprintf("Error running test file: %s\n\t%s", fileTest.GetFilePath(), err))
+				}
 			}
 		}
 
+		// Dry run results
+		if *dryRun {
+			console.Print(fmt.Sprintf("All %d tests passed validation!", len(testFiles)))
+		}
 	}
 }

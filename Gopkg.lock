@@ -18,9 +18,24 @@
 
 [[projects]]
   name = "github.com/mattrmiller/go-bedrock"
-  packages = ["brtesting"]
+  packages = [
+    "brstrings",
+    "brtesting"
+  ]
   revision = "1f8659f9a344491d3ea4d9500b72dbe865b8eae2"
   version = "v1.0"
+
+[[projects]]
+  name = "github.com/tidwall/gjson"
+  packages = ["."]
+  revision = "1e3f6aeaa5bad08d777ea7807b279a07885dd8b2"
+  version = "v1.1.3"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/tidwall/match"
+  packages = ["."]
+  revision = "1731857f09b1f38450e2c12409748407822dc6be"
 
 [[projects]]
   branch = "master"
@@ -67,6 +82,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "93218fef3c9b5ec56fa225898faba8198bfb486d56e900c32d2109cc8a44ce42"
+  inputs-digest = "3a0654b77707b60452bda957eac26025854f7e491d91de86688fc8a4876becd7"
   solver-name = "gps-cdcl"
   solver-version = 1

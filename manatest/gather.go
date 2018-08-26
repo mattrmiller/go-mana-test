@@ -8,6 +8,7 @@ import (
 	"github.com/mattrmiller/go-mana-test/console"
 	"os"
 	"path/filepath"
+	"sort"
 )
 
 // Gathers all test files at a path.
@@ -49,6 +50,11 @@ func GatherTestFiles(pathRead string) ([]TestFile, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// Sort test files by index
+	sort.Slice(files, func(i, j int) bool {
+		return files[i].Index > files[j].Index
+	})
 
 	return files, nil
 }

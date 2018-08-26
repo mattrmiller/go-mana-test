@@ -3,25 +3,26 @@ package manatest
 
 // Imports
 import (
+	"net/http"
 	"strings"
 )
 
 // Methods
 const (
-	METHOD_GET     = "GET"
-	METHOD_POST    = "POST"
-	METHOD_PUT     = "PUT"
-	METHOD_DELETE  = "DELETE"
-	METHOD_OPTIONS = "OPTIONS"
-	METHOD_PATCH   = "PATCH"
+	METHOD_GET     = http.MethodGet
+	METHOD_POST    = http.MethodPost
+	METHOD_PUT     = http.MethodPut
+	METHOD_DELETE  = http.MethodDelete
+	METHOD_OPTIONS = http.MethodOptions
+	METHOD_PATCH   = http.MethodPatch
 )
 
 // Validates http method.
-func ValidateMethod(method string) bool {
+func ValidateMethod(method *string) bool {
 
 	// Methods
-	method = strings.ToUpper(method)
-	switch method {
+	*method = strings.ToUpper(*method)
+	switch *method {
 	case
 		METHOD_GET,
 		METHOD_POST,
