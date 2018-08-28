@@ -13,7 +13,7 @@ func TestGatherTestFiles(tst *testing.T) {
 	// Gather files in valid folder
 	testFiles, err := GatherTestFiles("../testproj/tests")
 	brtesting.AssertEqual(tst, err, nil, "GatherTestFiles failed")
-	brtesting.AssertEqual(tst, len(testFiles), 12, "GatherTestFiles failed to find the correct number of test files")
+	brtesting.AssertEqual(tst, len(testFiles), 16, "GatherTestFiles failed to find the correct number of test files")
 
 	// Gather files in valid folder
 	_, err = GatherTestFiles("../testproj/tests/this-does-not-exist")

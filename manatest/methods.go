@@ -8,14 +8,7 @@ import (
 )
 
 // Methods
-const (
-	METHOD_GET     = http.MethodGet
-	METHOD_POST    = http.MethodPost
-	METHOD_PUT     = http.MethodPut
-	METHOD_DELETE  = http.MethodDelete
-	METHOD_OPTIONS = http.MethodOptions
-	METHOD_PATCH   = http.MethodPatch
-)
+const ()
 
 // Validates http method.
 func ValidateMethod(method *string) bool {
@@ -24,12 +17,14 @@ func ValidateMethod(method *string) bool {
 	*method = strings.ToUpper(*method)
 	switch *method {
 	case
-		METHOD_GET,
-		METHOD_POST,
-		METHOD_PUT,
-		METHOD_DELETE,
-		METHOD_OPTIONS,
-		METHOD_PATCH:
+		http.MethodGet,
+		http.MethodPost,
+		http.MethodPut,
+		http.MethodDelete,
+		http.MethodOptions,
+		http.MethodPatch,
+		http.MethodTrace,
+		http.MethodHead:
 		return true
 	}
 	return false

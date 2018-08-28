@@ -1,0 +1,15 @@
+name: Simple Api Example File
+url: http://api.slack.com
+method: GET
+headers:
+  - key: Content-Type
+    value: application/json
+  - key: User-Agent
+    value: "{{globals.USER_AGENT}}"
+checks:
+  - name: Proper response code
+    check:
+    value: 200
+cache:
+  - name: cache-name
+    value: invalid.cache.value

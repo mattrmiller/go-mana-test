@@ -32,8 +32,26 @@ func TestReplaceGlobalVars(tst *testing.T) {
 func TestReplaceRandomString(tst *testing.T) {
 
 	// Test 20 length
-	str := ReplaceRandomString("{{rand.string.20}}")
-	brtesting.AssertEqual(tst, len(str), 20, fmt.Sprintf("ReplaceRandomString failed to create a string of length 20: %s", str))
+	str := ReplaceRandomString("{{rand.string.50}}")
+	brtesting.AssertEqual(tst, len(str), 50, fmt.Sprintf("ReplaceRandomString failed to create a string of length 50: %s", str))
+
+}
+
+// Test ReplaceRandomStringLower.
+func TestReplaceRandomStringLower(tst *testing.T) {
+
+	// Test 20 length
+	str := ReplaceRandomStringLower("{{rand.string.lower.40}}")
+	brtesting.AssertEqual(tst, len(str), 40, fmt.Sprintf("ReplaceRandomStringLower failed to create a string of length 40: %s", str))
+
+}
+
+// Test ReplaceRandomStringUpper.
+func TestReplaceRandomStringUpper(tst *testing.T) {
+
+	// Test 20 length
+	str := ReplaceRandomStringUpper("{{rand.string.upper.30}}")
+	brtesting.AssertEqual(tst, len(str), 30, fmt.Sprintf("ReplaceRandomStringLower failed to create a string of length 30: %s", str))
 
 }
 

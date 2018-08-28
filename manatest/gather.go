@@ -53,7 +53,7 @@ func GatherTestFiles(pathRead string) ([]TestFile, error) {
 
 	// Sort test files by index
 	sort.Slice(files, func(i, j int) bool {
-		return files[i].Index > files[j].Index
+		return files[i].Index <= files[j].Index
 	})
 
 	return files, nil

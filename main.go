@@ -89,20 +89,21 @@ func cmdTest(cmd *cli.Cmd) {
 			err = fileTest.Validate()
 			if err != nil {
 				console.Print(fmt.Sprintf("Error in test file: %s\n\t%s", fileTest.GetFilePath(), err))
+				os.Exit(1)
 			}
 
 			// Run the test file
 			if !*dryRun {
-				err = fileTest.Test(projFile)
-				if err != nil {
-					console.Print(fmt.Sprintf("Error running test file: %s\n\t%s", fileTest.GetFilePath(), err))
+				if !fileTest.Test(projFile) {
+					os.Exit(1)
 				}
 			}
 		}
 
 		// Dry run results
-		if *dryRun {
-			console.Print(fmt.Sprintf("All %d tests passed validation!", len(testFiles)))
+		if !*dryRun {
+			console.Print(fmt.Sprintf("\nAll %d tests passed validation!", len(testFiles)))
 		}
 	}
+
 }

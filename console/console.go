@@ -1,6 +1,8 @@
 // Package console provides useful console functionality.
 package console
 
+import "strings"
+
 // Global variables
 var (
 
@@ -17,12 +19,13 @@ func SetVerboseMode() {
 
 // Prints a console line
 func Print(msg string) {
+	msg = strings.Replace(msg, "\t", "  ", -1)
 	println(msg)
 }
 
 // Prints a console line that is verbose
 func PrintVerbose(msg string) {
 	if verboseMode {
-		println(msg)
+		Print(msg)
 	}
 }
