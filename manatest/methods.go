@@ -10,7 +10,7 @@ import (
 // Methods
 const ()
 
-// Validates http method.
+// ValidateMethod Validates http method.
 func ValidateMethod(method *string) bool {
 
 	// Methods

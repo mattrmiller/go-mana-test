@@ -10,20 +10,20 @@ var (
 	verboseMode = false
 )
 
-// Sets console in verbose mode
+// SetVerboseMode Sets console in verbose mode
 func SetVerboseMode() {
 
 	// Set
 	verboseMode = true
 }
 
-// Prints a console line
+// Print Prints a console line
 func Print(msg string) {
 	msg = strings.Replace(msg, "\t", "  ", -1)
 	println(msg)
 }
 
-// Prints a console line that is verbose
+// PrintVerbose Prints a console line that is verbose
 func PrintVerbose(msg string) {
 	if verboseMode {
 		Print(msg)

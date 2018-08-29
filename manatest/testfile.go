@@ -57,7 +57,7 @@ type TestFile struct {
 	Name string `yaml:"name"`
 
 	// Url, holds the url of the test.
-	Url string `yaml:"url"`
+	URL string `yaml:"url"`
 
 	// Method, holds the http method of the test.
 	Method string `yaml:"method"`
@@ -78,25 +78,25 @@ type TestFile struct {
 	Cache []TestCache `yaml:"cache"`
 }
 
-// Reads a test file.
+// ReadTestFile Reads a test file.
 func ReadTestFile(pathFile string) (*TestFile, error) {
 
 	// Check if yml
 	if filepath.Ext(strings.TrimSpace(pathFile)) != ".yml" {
-		return nil, errors.New(fmt.Sprintf("Test file is not a 'yml' file: %s", pathFile))
+		return nil, fmt.Errorf("test file is not a 'yml' file: %s", pathFile)
 	}
 
 	// Read file
 	source, err := ioutil.ReadFile(pathFile)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("Unable to read test file at: %s", pathFile))
+		return nil, fmt.Errorf("unable to read test file at: %s", pathFile)
 	}
 
 	// Unmarshal yaml
 	var testFile TestFile
 	err = yaml.Unmarshal(source, &testFile)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("Invalid test file format at: %s", pathFile))
+		return nil, fmt.Errorf("invalid test file format at: %s", pathFile)
 	}
 
 	// Set path
@@ -105,25 +105,25 @@ func ReadTestFile(pathFile string) (*TestFile, error) {
 	return &testFile, nil
 }
 
-// Validates a test file is in proper format.
+// Validate Validates a test file is in proper format.
 func (testFile *TestFile) Validate() error {
 
 	// Must have a name
 	if len(testFile.Name) == 0 {
-		return errors.New("Test file must have 'name' field.")
+		return errors.New("test file must have 'name' field")
 	}
 
 	// Must have a url
-	if len(testFile.Url) == 0 {
-		return errors.New("Test file must have 'url' field.")
+	if len(testFile.URL) == 0 {
+		return errors.New("test file must have 'url' field")
 	}
 
 	// Must have a method
 	if len(testFile.Method) == 0 {
-		return errors.New("Test file must have 'method' field.")
+		return errors.New("test file must have 'method' field")
 	}
 	if !ValidateMethod(&testFile.Method) {
-		return errors.New("Test file has invalid 'method' field.")
+		return errors.New("test file has invalid 'method' field")
 	}
 
 	// Correct index
@@ -133,9 +133,9 @@ func (testFile *TestFile) Validate() error {
 
 	// Convert request body to json
 	if testFile.ReqBody != nil {
-		body, err := ConvertYamlToJson(testFile.ReqBody)
+		body, err := ConvertYamlToJSON(testFile.ReqBody)
 		if err != nil {
-			return errors.New("Unable to unmarshal JSON body.")
+			return errors.New("unable to unmarshal JSON body")
 		}
 		testFile.ReqBody = body
 	}
@@ -145,12 +145,12 @@ func (testFile *TestFile) Validate() error {
 
 		// -- Key
 		if len(header.Key) == 0 {
-			return errors.New("Test file header must have 'key' field.")
+			return errors.New("test file header must have 'key' field")
 		}
 
 		// -- Value
 		if len(header.Value) == 0 {
-			return errors.New("Test file header must have 'value' field.")
+			return errors.New("test file header must have 'value' fieldt")
 		}
 	}
 
@@ -159,21 +159,21 @@ func (testFile *TestFile) Validate() error {
 
 		// -- Name
 		if len(check.Name) == 0 {
-			return errors.New("Test file check must have 'name' field.")
+			return errors.New("test file check must have 'name' fieldt")
 		}
 
 		// -- Check
 		if len(check.Check) == 0 {
-			return errors.New("Test file check must have 'check' field.")
+			return errors.New("test file check must have 'check' field")
 		}
 		check.Check = strings.ToLower(check.Check)
 		if !ValidateCheck(&check.Check) {
-			return errors.New(fmt.Sprintf("Test file check has an invalid 'check' field: `%s'.", check.Check))
+			return fmt.Errorf("test file check has an invalid 'check' field: `%s'", check.Check)
 		}
 
 		// -- Check
 		if len(check.Value) == 0 {
-			return errors.New("Test file check must have 'value' field.")
+			return errors.New("test file check must have 'value' field")
 		}
 	}
 
@@ -182,23 +182,23 @@ func (testFile *TestFile) Validate() error {
 
 		// -- Name
 		if len(cache.Name) == 0 {
-			return errors.New("Test file cache must have 'name' field.")
+			return errors.New("test file cache must have 'name' field")
 		}
 
 		// -- Value
 		if len(cache.Value) == 0 {
-			return errors.New("Test file cache must have 'value' field.")
+			return errors.New("test file cache must have 'value' field")
 		}
 		cache.Value = strings.ToLower(cache.Value)
 		if !ValidateCacheValue(&cache.Value) {
-			return errors.New(fmt.Sprintf("Test file cache has an invalid 'value' field: '%s'.", cache.Value))
+			return fmt.Errorf("test file cache has an invalid 'value' field: '%s'", cache.Value)
 		}
 	}
 
 	return nil
 }
 
-// Test runs the test
+// Test Runs the test
 func (testFile *TestFile) Test(projFile *ProjectFile) bool {
 
 	// Replace headers global values
@@ -210,7 +210,7 @@ func (testFile *TestFile) Test(projFile *ProjectFile) bool {
 	testFile.Headers = headers
 
 	// Lets for the Url, with substitutions
-	url := ReplaceVars(testFile.Url, &projFile.Globals)
+	url := ReplaceVars(testFile.URL, &projFile.Globals)
 
 	// Console
 	console.Print(fmt.Sprintf("Running test: %s...", testFile.Name))
@@ -252,26 +252,25 @@ func (testFile *TestFile) Test(projFile *ProjectFile) bool {
 		console.PrintVerbose(fmt.Sprintf("\t%s", string(response.Body())))
 		console.PrintVerbose("")
 		return false
-	} else {
-
-		// -- Console
-		console.Print("\tPASSED!")
 	}
+
+	// -- Console
+	console.Print("\tPASSED!")
 
 	return true
 }
 
-// Gets the path of the test file.
+// GetPath Gets the path of the test file.
 func (testFile *TestFile) GetPath() string {
 	return filepath.Dir(testFile.filePath)
 }
 
-// Gets the path to the test file.
+// GetFilePath Gets the path to the test file.
 func (testFile *TestFile) GetFilePath() string {
 	return testFile.filePath
 }
 
-// Gets a resty client.
+// getRestyClient  a resty client.
 func (testFile *TestFile) getRestyClient(projFile *ProjectFile) *resty.Request {
 
 	// Turn off debug

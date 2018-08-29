@@ -3,7 +3,6 @@ package manatest
 
 // Imports
 import (
-	"errors"
 	"fmt"
 	"github.com/mattrmiller/go-mana-test/console"
 	"os"
@@ -11,12 +10,12 @@ import (
 	"sort"
 )
 
-// Gathers all test files at a path.
+// GatherTestFiles Gathers all test files at a path.
 func GatherTestFiles(pathRead string) ([]TestFile, error) {
 
 	// Make sure directory exists
 	if _, err := os.Stat(pathRead); os.IsNotExist(err) {
-		return nil, errors.New(fmt.Sprintf("Invalid path at: %s", pathRead))
+		return nil, fmt.Errorf("Invalid path at: %s", pathRead)
 	}
 
 	// Walk path

@@ -3,10 +3,10 @@ package manatest
 
 // Headers
 const (
-	HEADER_CONTENT_TYPE = "Content-Type"
+	HeaderContentType = "Content-Type"
 )
 
 // Content type
 const (
-	CONTENT_TYPE_JSON = "application/json"
+	ContentTypeJSON = "application/json"
 )

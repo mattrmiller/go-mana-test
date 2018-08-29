@@ -37,25 +37,25 @@ type ProjectFile struct {
 	Globals []ProjectGlobal `yaml:"globals"`
 }
 
-// Reads a project file.
+// ReadProjectFile Reads a project file.
 func ReadProjectFile(pathFile string) (*ProjectFile, error) {
 
 	// Check if yml
 	if filepath.Ext(strings.TrimSpace(pathFile)) != ".yml" {
-		return nil, errors.New(fmt.Sprintf("Project file is not a `yml` file: %s", pathFile))
+		return nil, fmt.Errorf("Project file is not a `yml` file: %s", pathFile)
 	}
 
 	// Read file
 	source, err := ioutil.ReadFile(pathFile)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("Unable to read project file at: %s", pathFile))
+		return nil, fmt.Errorf("Unable to read project file at: %s", pathFile)
 	}
 
 	// Unmarshal yaml
 	var projFile ProjectFile
 	err = yaml.Unmarshal(source, &projFile)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("Invalid project file format at: %s", pathFile))
+		return nil, fmt.Errorf("Invalid project file format at: %s", pathFile)
 	}
 
 	// Set path
@@ -64,28 +64,28 @@ func ReadProjectFile(pathFile string) (*ProjectFile, error) {
 	return &projFile, nil
 }
 
-// Validates a project file is in proper format.
+// Validate Validates a project file is in proper format.
 func (projFile *ProjectFile) Validate() error {
 
 	// Must have a name
 	if len(projFile.Name) == 0 {
-		return errors.New("Project file must have `name` field.")
+		return errors.New("roject file must have `name` field")
 	}
 
 	// Must have a tests
 	if len(projFile.Tests) == 0 {
-		return errors.New("Project file must have `tests` field.")
+		return errors.New("project file must have `tests` field")
 	}
 
 	return nil
 }
 
-// Gets the path of the project file.
+// GetPath Gets the path of the project file.
 func (projFile *ProjectFile) GetPath() string {
 	return filepath.Dir(projFile.filePath)
 }
 
-// Gets the path to the project file.
+// GetFilePath Gets the path to the project file.
 func (projFile *ProjectFile) GetFilePath() string {
 	return projFile.filePath
 }

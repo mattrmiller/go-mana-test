@@ -6,14 +6,14 @@ import (
 	"encoding/json"
 )
 
-// Converts yaml to json
-func ConvertYamlToJson(i interface{}) (string, error) {
+// ConvertYamlToJSON Converts yaml to json
+func ConvertYamlToJSON(i interface{}) (string, error) {
 
 	switch x := i.(type) {
 	case map[interface{}]interface{}:
 		m2 := map[string]interface{}{}
 		for k, v := range x {
-			tmp, err := ConvertYamlToJson(v)
+			tmp, err := ConvertYamlToJSON(v)
 			if err != nil {
 				return "", err
 			}
@@ -27,7 +27,7 @@ func ConvertYamlToJson(i interface{}) (string, error) {
 		return string(ret), nil
 	case []interface{}:
 		for i, v := range x {
-			tmp, err := ConvertYamlToJson(v)
+			tmp, err := ConvertYamlToJSON(v)
 			if err != nil {
 				return "", err
 			}

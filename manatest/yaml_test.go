@@ -7,8 +7,8 @@ import (
 	"testing"
 )
 
-// Test ConvertYamlToJson.
-func TestConvertYamlToJson(tst *testing.T) {
+// Test ConvertYamlToJSON.
+func TestConvertYamlToJSON(tst *testing.T) {
 
 	// Variables
 	yaml := `
@@ -16,6 +16,6 @@ func TestConvertYamlToJson(tst *testing.T) {
   email: johndoe@gmail.com
 `
 
-	_, err := ConvertYamlToJson(yaml)
-	brtesting.AssertEqual(tst, err, nil, "TestConvertYamlToJson failed for error not nil.")
+	_, err := ConvertYamlToJSON(yaml)
+	brtesting.AssertEqual(tst, err, nil, "TestConvertYamlToJSON failed for error not nil.")
 }
