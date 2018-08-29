@@ -22,8 +22,8 @@
     "brstrings",
     "brtesting"
   ]
-  revision = "1f8659f9a344491d3ea4d9500b72dbe865b8eae2"
-  version = "v1.0"
+  revision = "d53e4234c49cbf5e1e460e50a05727ed778e9f4c"
+  version = "v1.0.1"
 
 [[projects]]
   name = "github.com/tidwall/gjson"
@@ -44,7 +44,7 @@
     "idna",
     "publicsuffix"
   ]
-  revision = "f4c29de78a2a91c00474a2e689954305c350adf9"
+  revision = "8a410e7b638dca158bf9e766925842f6651ff828"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -70,8 +70,8 @@
 [[projects]]
   name = "gopkg.in/resty.v1"
   packages = ["."]
-  revision = "fccc498aed22c31ff3768bcac00795f94149a21d"
-  version = "v1.7.0"
+  revision = "383acc8a8b687098ee02168c0335a43dfee701f0"
+  version = "v1.9.0"
 
 [[projects]]
   name = "gopkg.in/yaml.v2"
@@ -82,6 +82,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "3a0654b77707b60452bda957eac26025854f7e491d91de86688fc8a4876becd7"
+  inputs-digest = "52f135c82ecb8a83b4cab3e41fa5115e9047b56ee3ba293792b948e33165f71e"
   solver-name = "gps-cdcl"
   solver-version = 1

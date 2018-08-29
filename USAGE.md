@@ -1,6 +1,6 @@
 # Usage
 
-# Command Line
+## Command Line
 ```bash
 Usage: go-mana-test [OPTIONS] COMMAND [arg...]
 
@@ -32,7 +32,7 @@ You can also do a dry run, which will just collect and validate test files but n
 go-mana-test test ./exampleproj/project.yml -d
 ```
 
-# Project File
+## Project File
 The project file setups your project. Here is an example project file.
 ```yaml
 name: My Sample Project
@@ -45,7 +45,7 @@ globals:
  - tests: Defines the path to your [test files](#test-file), relative to the path this project file is in.
  - globals: Defiles key/value global [variables](#variables) that can be later used in your tests.
  
-# Test File
+## Test File
 The test file defines a single test for your project. Here is an example of a test file.
 ```yaml
 name: Update User Profile
@@ -79,7 +79,7 @@ checks:
  - cache: Defines [cache](#cache) to save from this test.
  - checks: Defines the [checks](#test-checks) to validate in this test.
  
- # Test Cache
+## Test Cache
 Test cache is run before the [test checks][#test-checks]. Caching allows you to cache certain values that can cary onto the checks in your test file, or across all test files.
 
 The test cache uses key/value methods to store data. 
@@ -88,7 +88,7 @@ The test cache uses key/value methods to store data.
  - value: Defines the value to cache. Can be any of the following:
    - response.body.json: Refers the json body of the response. Anything following this prefix this will [query methods of the json](#json-query) body.
 
- # Test Checks
+## Test Checks
 Test checks are used to validate results of the test. 
 
  - name: Defines the name of your test. Can be any string. 
@@ -97,7 +97,7 @@ Test checks are used to validate results of the test.
    - response.body.json: Refers the json body of the response. Anything following this prefix this will [query methods of the json](#json-query) body. 
  - value: Defines the value to use in the test. This may make use of [variables](#variables).
 
-# Variables
+## Variables
 Variable substitution is helpful for certain properties of the test and project files. Inside of YAML files, replacements must always be enclosed inside of `""`. The full syntax is:
 ```yaml
 "{{variable.to.use}}
@@ -151,7 +151,7 @@ Generates a random number in between a certain range. The syntax to generate a n
 "{{rand.num.1.100}}"
 ```
 
-# JSON Query
+## JSON Query
 
 #### Path Syntax
 A path is a series of keys separated by a dot.
