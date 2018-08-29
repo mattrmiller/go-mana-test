@@ -102,7 +102,9 @@ func cmdTest(cmd *cli.Cmd) {
 
 		// Dry run results
 		if !*dryRun {
-			console.Print(fmt.Sprintf("\nAll %d tests passed validation!", len(testFiles)))
+			console.Print(fmt.Sprintf("\nAll %d tests passed tests!", len(testFiles)))
+		} else {
+			console.Print(fmt.Sprintf("%d tests found and passed validation!", len(testFiles)))
 		}
 	}
 

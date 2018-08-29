@@ -56,17 +56,17 @@ type TestFile struct {
 	// Name, holds the name of the test.
 	Name string `yaml:"name"`
 
-	// Url, holds the url of the test.
-	URL string `yaml:"url"`
-
-	// Method, holds the http method of the test.
-	Method string `yaml:"method"`
-
 	// Index, hold the index of this test.
 	Index int `yaml:"index"`
 
+	// URL, holds the url of the test.
+	URL string `yaml:"url"`
+
+	// Method, holds the http method of the test.
+	RequestMethod string `yaml:"request.method"`
+
 	// Headers, holds the header variables.
-	Headers []TestHeader `yaml:"headers"`
+	RequestHeaders []TestHeader `yaml:"request.headers"`
 
 	// Body, holds the test http body.
 	ReqBody interface{} `yaml:"request.body"`
@@ -119,10 +119,10 @@ func (testFile *TestFile) Validate() error {
 	}
 
 	// Must have a method
-	if len(testFile.Method) == 0 {
+	if len(testFile.RequestMethod) == 0 {
 		return errors.New("test file must have 'method' field")
 	}
-	if !ValidateMethod(&testFile.Method) {
+	if !ValidateMethod(&testFile.RequestMethod) {
 		return errors.New("test file has invalid 'method' field")
 	}
 
@@ -141,7 +141,7 @@ func (testFile *TestFile) Validate() error {
 	}
 
 	// Validate headers
-	for _, header := range testFile.Headers {
+	for _, header := range testFile.RequestHeaders {
 
 		// -- Key
 		if len(header.Key) == 0 {
@@ -203,30 +203,30 @@ func (testFile *TestFile) Test(projFile *ProjectFile) bool {
 
 	// Replace headers global values
 	var headers []TestHeader
-	for _, header := range testFile.Headers {
+	for _, header := range testFile.RequestHeaders {
 		header.Value = ReplaceVars(header.Value, &projFile.Globals)
 		headers = append(headers, header)
 	}
-	testFile.Headers = headers
+	testFile.RequestHeaders = headers
 
-	// Lets for the Url, with substitutions
+	// Lets for the URL, with substitutions
 	url := ReplaceVars(testFile.URL, &projFile.Globals)
 
 	// Console
 	console.Print(fmt.Sprintf("Running test: %s...", testFile.Name))
-	console.Print(fmt.Sprintf("\t%s: %s", testFile.Method, url))
+	console.Print(fmt.Sprintf("\t%s: %s", testFile.RequestMethod, url))
 
 	// Get client
 	client := testFile.getRestyClient(projFile)
 
 	// Set body
-	if testFile.ReqBody != nil && testFile.Method != http.MethodTrace {
+	if testFile.ReqBody != nil && testFile.RequestMethod != http.MethodTrace {
 		client.SetBody(ReplaceVars(testFile.ReqBody.(string), &projFile.Globals))
 	}
 
 	// Run
 	console.Print("\tRunning request...")
-	response, err := client.Execute(testFile.Method, url)
+	response, err := client.Execute(testFile.RequestMethod, url)
 	if err != nil {
 		console.Print(fmt.Sprintf("\tFAIL: %s", err))
 		return false
@@ -281,7 +281,7 @@ func (testFile *TestFile) getRestyClient(projFile *ProjectFile) *resty.Request {
 		SetContentLength(true)
 
 	// Set headers
-	for _, header := range testFile.Headers {
+	for _, header := range testFile.RequestHeaders {
 		client = client.SetHeader(header.Key, header.Value)
 	}
 

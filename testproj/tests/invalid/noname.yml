@@ -1,2 +1,2 @@
 url: http://api.slack.com
-method: GET
+request.method: GET

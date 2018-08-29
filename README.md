@@ -8,9 +8,18 @@ Making APIs Nice Again - Testing Framework.
 The Make Apis Nice Again. This is a testing framework to help you quickly, and neatly write end to end tests for your Api.
 
 ## Install
-```
+```bash
 go get github.com/mattrmiller/go-mana-test
 ```
+
+## Usage
+See the [Usage Guide](/USAGE.md) for steps on how to use to this project.
+
+## Testing
+go-mana-test ./path/to/ptoject
+
+## Dry Run
+You can
 
 ## Contributing
 See the [Contributing Guide](/CONTRIBUTING.md) for steps on how to contribute to this project.

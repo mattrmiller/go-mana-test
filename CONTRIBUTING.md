@@ -10,12 +10,12 @@ We use [dep](https://github.com/golang/dep/) as our dependency manager.
 This is a service, so in order to produce reproducible builds we check in our `vendor` directory.
 
 Adding a new package:
-```
+```bash
 dep ensure -add github.com/foo/bar
 ```
 
 From there, when you need to update to a new version. Just update to [Gopkg.toml](./Gopkg.toml) file following the [version schema](https://github.com/golang/dep/blob/master/docs/Gopkg.toml.md).
-```
+```bash
 dep ensure -update
 ```
 
@@ -23,7 +23,7 @@ dep ensure -update
 Please provide tests for any core logic changes. Such as the API routes.
 
 * Test recursively, all go tests, in current folder:
-```
+```bash
 alias go-testall='go test $(go list ./... | grep -v vendor)'
 ```
 * To run only tests from a package: `go test <path>`

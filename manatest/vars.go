@@ -114,7 +114,7 @@ func ReplaceRandomStringUpper(str string) string {
 
 			// -- Convert to number
 			num, err := strconv.Atoi(v[1])
-			if err != nil {
+			if err == nil {
 
 				// -- Generate random string
 				replace := brstrings.RandomString(num, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
@@ -124,6 +124,7 @@ func ReplaceRandomStringUpper(str string) string {
 			}
 		}
 	}
+
 	return str
 }
 

@@ -33,7 +33,7 @@ func TestGetCacheKeys(tst *testing.T) {
 	SetCache("two", "1")
 	keys := GetCacheKeys()
 	brtesting.AssertEqual(tst, keys[0], "one", "GetCacheKeys failed for 'one'")
-	brtesting.AssertEqual(tst, keys[1], "two", "GetCacheKeys failed for 'one'")
+	brtesting.AssertEqual(tst, keys[1], "two", "GetCacheKeys failed for 'two'")
 }
 
 // Test GetCache.

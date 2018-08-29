@@ -1,7 +1,7 @@
 name: Simple Api Example File
 url: http://api.slack.com
-method: GET
-headers:
+request.method: GET
+request.headers:
   - key: Content-Type
     value: application/json
   - key: User-Agent

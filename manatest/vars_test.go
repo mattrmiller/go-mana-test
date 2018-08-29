@@ -51,7 +51,7 @@ func TestReplaceRandomStringUpper(tst *testing.T) {
 
 	// Test 20 length
 	str := ReplaceRandomStringUpper("{{rand.string.upper.30}}")
-	brtesting.AssertEqual(tst, len(str), 30, fmt.Sprintf("ReplaceRandomStringLower failed to create a string of length 30: %s", str))
+	brtesting.AssertEqual(tst, len(str), 30, fmt.Sprintf("ReplaceRandomStringUpper failed to create a string of length 30: %s", str))
 
 }
 
