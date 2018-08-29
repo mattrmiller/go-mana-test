@@ -12,12 +12,6 @@ The Make Apis Nice Again. This is a testing framework to help you quickly, and n
 go get github.com/mattrmiller/go-mana-test
 ```
 
-```
-import (
-    bedrock "github.com/mattrmiller/go-mana-test"
-)
-```
-
 ## Contributing
 See the [Contributing Guide](/CONTRIBUTING.md) for steps on how to contribute to this project.
 
