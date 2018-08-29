@@ -1,7 +1,7 @@
 # go-mana-test
 Making APIs Nice Again - Testing Framework.
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/mattrmiller/go-mana-test)](https://goreportcard.com/report/github.com/mattrmiller/go-mana-tet)
+[![Go Report Card](https://goreportcard.com/badge/github.com/mattrmiller/go-mana-test)](https://goreportcard.com/report/github.com/mattrmiller/go-mana-test)
 [![godocs](https://img.shields.io/badge/godocs-reference-blue.svg)](https://godoc.org/github.com/mattrmiller/go-mana-test)
 
 ## Mission Statement
