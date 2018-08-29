@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 )
 
-// ConvertYamlToJSON Converts yaml to json
+// ConvertYamlToJSON Converts yaml to json.
 func ConvertYamlToJSON(i interface{}) (string, error) {
 
 	switch x := i.(type) {

@@ -198,7 +198,7 @@ func (testFile *TestFile) Validate() error {
 	return nil
 }
 
-// Test Runs the test
+// Test Runs the test.
 func (testFile *TestFile) Test(projFile *ProjectFile) bool {
 
 	// Replace headers global values
@@ -270,7 +270,7 @@ func (testFile *TestFile) GetFilePath() string {
 	return testFile.filePath
 }
 
-// getRestyClient  a resty client.
+// getRestyClient Gets a resty client.
 func (testFile *TestFile) getRestyClient(projFile *ProjectFile) *resty.Request {
 
 	// Turn off debug
