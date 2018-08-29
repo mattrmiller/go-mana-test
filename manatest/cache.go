@@ -52,6 +52,11 @@ func SaveCacheFromResponse(caches *[]TestCache, response *resty.Response) error 
 	return nil
 }
 
+// Clears cache
+func ClearCache() {
+	cache = make(map[string]string)
+}
+
 // Gets a value from inside of cache.
 func GetCacheKeys() []string {
 	keys := reflect.ValueOf(cache).MapKeys()
@@ -73,7 +78,7 @@ func SetCache(key string, value string) {
 
 	// Make cache
 	if cache == nil {
-		cache = make(map[string]string)
+		ClearCache()
 	}
 
 	// Set cache

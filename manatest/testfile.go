@@ -238,6 +238,8 @@ func (testFile *TestFile) Test(projFile *ProjectFile) bool {
 		console.PrintVerbose("")
 		console.PrintVerbose(fmt.Sprintf("\tError saving cache: '%s'", err))
 		console.PrintVerbose("")
+		console.PrintVerbose(fmt.Sprintf("\t%s", string(response.Body())))
+		console.PrintVerbose("")
 		return false
 	}
 
