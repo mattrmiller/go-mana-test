@@ -15,9 +15,6 @@ go get github.com/mattrmiller/go-mana-test
 ## Usage
 See the [Usage Guide](/USAGE.md) for steps on how to use to this project.
 
-## Testing
-go-mana-test ./path/to/ptoject
-
 ## Dry Run
 You can
 
