@@ -77,7 +77,7 @@ checks:
  - request.headers: Defines the HTTP headers to send in the test in key/value format.
  - request.body: Defines the body to send in the test. If you are sending JSON [https://www.json2yaml.com](https://www.json2yaml.com/) is a nice tool to help you convert JSON to YAML.
  - cache: Defines [cache](#cache) to save from this test.
- - checks: Defines the checks to validate in this test.
+ - checks: Defines the [checks](#test-checks) to validate in this test.
  
  # Test Cache
 Test cache is run before the [test checks][#test-checks]. Caching allows you to cache certain values that can cary onto the checks in your test file, or across all test files.
