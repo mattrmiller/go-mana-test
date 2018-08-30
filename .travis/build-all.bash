@@ -3,7 +3,7 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 #
-# This script will build dep and calculate hash for each
+# This script will build go-mana-test and calculate hash for each
 # (DEP_BUILD_PLATFORMS, DEP_BUILD_ARCHS) pair.
 # DEP_BUILD_PLATFORMS="linux" DEP_BUILD_ARCHS="amd64" ./hack/build-all.bash
 # can be called to build only for linux-amd64
@@ -38,13 +38,12 @@ mkdir -p "${DEP_ROOT}/release"
 
 for OS in ${DEP_BUILD_PLATFORMS[@]}; do
   for ARCH in ${DEP_BUILD_ARCHS[@]}; do
-    NAME="dep-${OS}-${ARCH}"
+    NAME="go-mana-test-${OS}-${ARCH}"
     if [[ "${OS}" == "windows" ]]; then
       NAME="${NAME}.exe"
     fi
 
     # Enable CGO if building for OS X on OS X; see
-    # https://github.com/golang/dep/issues/1838 for details.
     if [[ "${OS}" == "darwin" && "${BUILD_PLATFORM}" == "darwin" ]]; then
       CGO_ENABLED=1
     else
@@ -56,7 +55,7 @@ for OS in ${DEP_BUILD_PLATFORMS[@]}; do
     else
         echo "Building for ${OS}/${ARCH} with CGO_ENABLED=${CGO_ENABLED}"
         GOARCH=${ARCH} GOOS=${OS} CGO_ENABLED=${CGO_ENABLED} ${GO_BUILD_CMD} -ldflags "${GO_BUILD_LDFLAGS}"\
-            -o "${DEP_ROOT}/release/${NAME}" ./cmd/dep/
+            -o "${DEP_ROOT}/release/${NAME}" ./cmd/go-mana-test/
         shasum -a 256 "${DEP_ROOT}/release/${NAME}" > "${DEP_ROOT}/release/${NAME}".sha256
     fi
   done
