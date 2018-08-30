@@ -46,7 +46,7 @@ func ReadProjectFile(pathFile string) (*ProjectFile, error) {
 	}
 
 	// Read file
-	source, err := ioutil.ReadFile(pathFile)
+	source, err := ioutil.ReadFile(pathFile) // nolint: gosec
 	if err != nil {
 		return nil, fmt.Errorf("Unable to read project file at: %s", pathFile)
 	}

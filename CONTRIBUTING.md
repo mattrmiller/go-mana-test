@@ -20,17 +20,23 @@ dep ensure -update
 ```
 
 ## Tests
-Please provide tests for any core logic changes. Such as the API routes.
+Please provide tests for any core logic changes. To run tests:
 
-* Test recursively, all go tests, in current folder:
 ```bash
-alias go-testall='go test $(go list ./... | grep -v vendor)'
+make test
 ```
 * To run only tests from a package: `go test <path>`
 * To run only a single test: `go test -run <test-name> <path>` (e.g. test-name=`MyTestFunc` path=`./api`)
 * To run tests in debug mode: `go test -debug` (in case is passing a path, debug flag must be the last argument)
 
+## Linting
+Please make sure your code changes pass all linting rules. To run lint:
+
+```bash
+make lint
+```
+
 ## Pull Requeests
-- Please make sure all changed files are run through gofmt
+- Please open an Issue stating intent with all PRs
 - Submit a PR for review
 - Your name will be added below to Contributors

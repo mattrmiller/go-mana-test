@@ -13,15 +13,15 @@ import (
 
 // Constants
 const (
-	APP_NAME    = "go-mana-test"
-	APP_VERSION = "1.0.0"
+	AppName    = "go-mana-test"
+	AppVersion = "1.0.0"
 )
 
 // Main execution point
 func main() {
 
 	// Setup app
-	app := cli.App(APP_NAME, "Making APIs Nice Again - Testing Framework")
+	app := cli.App(AppName, "Making APIs Nice Again - Testing Framework")
 	verbose := app.BoolOpt("v verbose", false, "Verbose mode")
 
 	// Handle verbose mode
@@ -36,7 +36,11 @@ func main() {
 	app.Command("test", "Run tests", cmdTest)
 
 	// Run commands
-	app.Run(os.Args)
+	err := app.Run(os.Args)
+	if err != nil {
+		console.Print("Error running application")
+		os.Exit(1)
+	}
 }
 
 // cmdVersion Displays version info
@@ -46,7 +50,7 @@ func cmdVersion(cmd *cli.Cmd) {
 	cmd.Action = func() {
 
 		// Print version
-		console.Print(fmt.Sprintf("%s - %s\n", APP_NAME, APP_VERSION))
+		console.Print(fmt.Sprintf("%s - %s\n", AppName, AppVersion))
 	}
 }
 

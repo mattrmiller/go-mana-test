@@ -20,7 +20,7 @@ func GatherTestFiles(pathRead string) ([]TestFile, error) {
 
 	// Walk path
 	files := []TestFile{}
-	err := filepath.Walk(pathRead, func(pathFile string, fileInfo os.FileInfo, err error) error {
+	err := filepath.Walk(pathRead, func(pathFile string, fileInfo os.FileInfo, _ error) error {
 
 		// Check if yml
 		isYml, err := filepath.Match("*.yml", fileInfo.Name())

@@ -8,8 +8,5 @@
 *.iws
 .idea/
 
-# Vendor
-vendor
-
 # Example project
 exampleproj

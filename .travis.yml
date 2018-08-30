@@ -1,0 +1,53 @@
+language: go
+sudo: false
+notifications:
+  email: false
+jobs:
+  include:
+  - stage: test
+    go: 1.10.x
+    os: osx
+    go_import_path: github.com/mattrmiller/go-mana-test
+    install: skip
+    script:
+    - make test
+  - stage: build
+    go: 1.10.x
+    os: osx
+    go_import_path: github.com/mattrmiller/go-mana-test
+    install: skip
+    script: skip
+    before_deploy:
+    - ./.travis/build-all.bash
+    deploy:
+    - provider: releases
+      api_key:
+        secure: "ePPDdLK8hPbciGy4VJ6aKvZ0q4+iby6gDJNiwfHes26jKmyfa2TIOal4fHwTodOMazPmnIvlnAW1jUea/x5AZZWlq8gHcogovhqwf5ef3HPpxMTOcLoYVPRtUsOCcWfONRuu2Wwzf0oNTmBoKKQ5giMygUr+lnWfyzEjd3mR1ii3XK9ddPajbtAv/kC3AwG4W90EVNWHU55gAXwHxLF3hYgeWzcsAsEsWgM6h/3fGMAAebB05L8ZCaPzUkeHf6alNigXC6v3huNtMbTu2AfIMWWV7IP4XQ+bVLO1T34gYAB/YlLBx6vO2huf1KeqfqS5KrH1qUovy+GqY7bktK2luEHEdzOZxoJrhgU+If+yt9GcWScfzwxRI1e0nTqUDxacBx///S9Ki9T1jxpBaa1vvnTV05iAQBJ5ynCCBES1ncTI9ym0mKbep5fFFCopxBldb/V+9Iv+tgBdOP0MKemL4hZdI/SUkyyjBWusHzmQx+7rrw4z7XHuSl3grE5bhwS0naWu/xakDq94s9NWb0Id/VGu7foUQSymbR2zDG5KSCJsovJaNo0J2ONxlN5lkeMLho7CNygY+ESjX5or8+MCetnpoJNibKfVcMkw/pMyhJVTXJYlfgLcnl/9VllaE9VEerZE/xlOx9IL5G3NbKtqfxpem0d2o1sKJA3Lyc8mf+Y="
+      file:
+      - release/go-mana-test-linux-amd64
+      - release/go-mana-test-linux-amd64.sha256
+      - release/go-mana-test-darwin-amd64
+      - release/go-mana-test-darwin-amd64.sha256
+      - release/go-mana-test-freebsd-amd64
+      - release/go-mana-test-freebsd-amd64.sha256
+      - release/go-mana-test-windows-amd64.exe
+      - release/go-mana-test-windows-amd64.exe.sha256
+      - release/go-mana-test-linux-386
+      - release/go-mana-test-linux-386.sha256
+      - release/go-mana-test-darwin-386
+      - release/go-mana-test-darwin-386.sha256
+      - release/go-mana-test-freebsd-386
+      - release/go-mana-test-freebsd-386.sha256
+      - release/go-mana-test-windows-386.exe
+      - release/go-mana-test-windows-386.exe.sha256
+      - release/go-mana-test-linux-ppc64
+      - release/go-mana-test-linux-ppc64.sha256
+      - release/go-mana-test-linux-ppc64le
+      - release/go-mana-test-linux-ppc64le.sha256
+      skip_cleanup: true
+      on:
+        repo: mattrmiller/go-mana-test
+        branch: master
+        tags: true
+addons:
+  ssh_known_hosts: github.com

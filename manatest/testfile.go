@@ -87,7 +87,7 @@ func ReadTestFile(pathFile string) (*TestFile, error) {
 	}
 
 	// Read file
-	source, err := ioutil.ReadFile(pathFile)
+	source, err := ioutil.ReadFile(pathFile) // nolint: gosec
 	if err != nil {
 		return nil, fmt.Errorf("unable to read test file at: %s", pathFile)
 	}
@@ -217,7 +217,7 @@ func (testFile *TestFile) Test(projFile *ProjectFile) bool {
 	console.Print(fmt.Sprintf("\t%s: %s", testFile.RequestMethod, url))
 
 	// Get client
-	client := testFile.getRestyClient(projFile)
+	client := testFile.getRestyClient()
 
 	// Set body
 	if testFile.ReqBody != nil && testFile.RequestMethod != http.MethodTrace {
@@ -271,7 +271,7 @@ func (testFile *TestFile) GetFilePath() string {
 }
 
 // getRestyClient Gets a resty client.
-func (testFile *TestFile) getRestyClient(projFile *ProjectFile) *resty.Request {
+func (testFile *TestFile) getRestyClient() *resty.Request {
 
 	// Turn off debug
 	resty.SetDebug(false)

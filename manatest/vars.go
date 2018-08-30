@@ -55,19 +55,17 @@ func ReplaceRandomString(str string) string {
 		return ""
 	}
 	result := re.FindAllStringSubmatch(str, -1)
-	if result != nil {
-		for _, v := range result {
+	for _, v := range result {
 
-			// -- Convert to number
-			num, err := strconv.Atoi(v[1])
-			if err == nil {
+		// -- Convert to number
+		num, err := strconv.Atoi(v[1])
+		if err == nil {
 
-				// -- Generate random string
-				replace := brstrings.RandomAlphaNumString(num)
+			// -- Generate random string
+			replace := brstrings.RandomAlphaNumString(num)
 
-				// -- Replace
-				str = strings.Replace(str, fmt.Sprintf("{{rand.string.%d}}", num), replace, -1)
-			}
+			// -- Replace
+			str = strings.Replace(str, fmt.Sprintf("{{rand.string.%d}}", num), replace, -1)
 		}
 	}
 
@@ -83,20 +81,19 @@ func ReplaceRandomStringLower(str string) string {
 		return ""
 	}
 	result := re.FindAllStringSubmatch(str, -1)
-	if result != nil {
-		for _, v := range result {
+	for _, v := range result {
 
-			// -- Convert to number
-			num, err := strconv.Atoi(v[1])
-			if err == nil {
-				// -- Generate random string
-				replace := brstrings.RandomString(num, "abcdefghijklmnopqrstuvwxyz0123456789")
+		// -- Convert to number
+		num, err := strconv.Atoi(v[1])
+		if err == nil {
+			// -- Generate random string
+			replace := brstrings.RandomString(num, "abcdefghijklmnopqrstuvwxyz0123456789")
 
-				// -- Replace
-				str = strings.Replace(str, fmt.Sprintf("{{rand.string.lower.%d}}", num), replace, -1)
-			}
+			// -- Replace
+			str = strings.Replace(str, fmt.Sprintf("{{rand.string.lower.%d}}", num), replace, -1)
 		}
 	}
+
 	return str
 }
 
@@ -109,19 +106,17 @@ func ReplaceRandomStringUpper(str string) string {
 		return ""
 	}
 	result := re.FindAllStringSubmatch(str, -1)
-	if result != nil {
-		for _, v := range result {
+	for _, v := range result {
 
-			// -- Convert to number
-			num, err := strconv.Atoi(v[1])
-			if err == nil {
+		// -- Convert to number
+		num, err := strconv.Atoi(v[1])
+		if err == nil {
 
-				// -- Generate random string
-				replace := brstrings.RandomString(num, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+			// -- Generate random string
+			replace := brstrings.RandomString(num, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 
-				// -- Replace
-				str = strings.Replace(str, fmt.Sprintf("{{rand.string.upper.%d}}", num), replace, -1)
-			}
+			// -- Replace
+			str = strings.Replace(str, fmt.Sprintf("{{rand.string.upper.%d}}", num), replace, -1)
 		}
 	}
 
@@ -137,21 +132,19 @@ func ReplaceRandomNumber(str string) string {
 		return ""
 	}
 	result := re.FindAllStringSubmatch(str, -1)
-	if result != nil {
-		for _, v := range result {
+	for _, v := range result {
 
-			// -- Convert to number
-			min, err1 := strconv.Atoi(v[1])
-			max, err2 := strconv.Atoi(v[2])
-			if err1 == nil && err2 == nil {
+		// -- Convert to number
+		min, err1 := strconv.Atoi(v[1])
+		max, err2 := strconv.Atoi(v[2])
+		if err1 == nil && err2 == nil {
 
-				// -- Generate random number
-				rand.Seed(time.Now().Unix())
-				replace := rand.Intn(max-min) + min
+			// -- Generate random number
+			rand.Seed(time.Now().Unix())
+			replace := rand.Intn(max-min) + min
 
-				// -- Replace
-				str = strings.Replace(str, fmt.Sprintf("{{rand.num.%d.%d}}", min, max), strconv.Itoa(replace), -1)
-			}
+			// -- Replace
+			str = strings.Replace(str, fmt.Sprintf("{{rand.num.%d.%d}}", min, max), strconv.Itoa(replace), -1)
 		}
 	}
 
@@ -167,15 +160,13 @@ func ReplaceCache(str string) string {
 		return ""
 	}
 	result := re.FindAllStringSubmatch(str, -1)
-	if result != nil {
-		for _, v := range result {
+	for _, v := range result {
 
-			// -- Get cache
-			cacheValue := GetCache(v[1])
+		// -- Get cache
+		cacheValue := GetCache(v[1])
 
-			// -- Replace
-			str = strings.Replace(str, fmt.Sprintf("{{cache.%s}}", v[1]), cacheValue, -1)
-		}
+		// -- Replace
+		str = strings.Replace(str, fmt.Sprintf("{{cache.%s}}", v[1]), cacheValue, -1)
 	}
 
 	return str

@@ -19,7 +19,8 @@ func TestReadProjectFile(tst *testing.T) {
 	for _, file := range files {
 		projFile, err := ReadProjectFile(file)
 		brtesting.AssertEqual(tst, err, nil, fmt.Sprintf("ReadProjectFile failed: %s", file))
-		brtesting.AssertEqual(tst, projFile.Validate(), nil, fmt.Sprintf("ReadProjectFile failed to validate a valid project file: %s", file))
+		brtesting.AssertEqual(tst, projFile.Validate(), nil,
+			fmt.Sprintf("ReadProjectFile failed to validate a valid project file: %s", file))
 	}
 
 	// Invalid files
@@ -30,7 +31,8 @@ func TestReadProjectFile(tst *testing.T) {
 	for _, file := range files {
 		projFile, err := ReadProjectFile(file)
 		brtesting.AssertEqual(tst, err, nil, fmt.Sprintf("ReadProjectFile failed: %s", file))
-		brtesting.AssertNotEqual(tst, projFile.Validate(), nil, fmt.Sprintf("ReadProjectFile failed to validate a invalid project file: %s", file))
+		brtesting.AssertNotEqual(tst, projFile.Validate(), nil,
+			fmt.Sprintf("ReadProjectFile failed to validate a invalid project file: %s", file))
 	}
 
 	// Non yml file

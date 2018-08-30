@@ -23,11 +23,7 @@ var cache map[string]string
 func ValidateCacheValue(value *string) bool {
 
 	// Body json
-	if strings.HasPrefix(*value, CacheBodyJSON) {
-		return true
-	}
-
-	return false
+	return strings.HasPrefix(*value, CacheBodyJSON)
 }
 
 // SaveCacheFromResponse Saves cache from response.
