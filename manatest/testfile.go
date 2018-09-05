@@ -5,6 +5,7 @@ package manatest
 import (
 	"errors"
 	"fmt"
+	yaml2 "github.com/ghodss/yaml"
 	"github.com/mattrmiller/go-mana-test/console"
 	"gopkg.in/resty.v1"
 	"gopkg.in/yaml.v2"
@@ -133,11 +134,16 @@ func (testFile *TestFile) Validate() error {
 
 	// Convert request body to json
 	if testFile.ReqBody != nil {
-		body, err := ConvertYamlToJSON(testFile.ReqBody)
+		yamlBytes, err := yaml.Marshal(testFile.ReqBody)
 		if err != nil {
-			return errors.New("unable to unmarshal JSON body")
+			return fmt.Errorf("unable to unmarshal YAML request body: %s", err)
 		}
-		testFile.ReqBody = body
+		body, err := yaml2.YAMLToJSON(yamlBytes)
+		if err != nil {
+			return fmt.Errorf("unable to unmarshal JSON request body: %s", err)
+		}
+
+		testFile.ReqBody = string(body)
 	}
 
 	// Validate headers
@@ -150,7 +156,7 @@ func (testFile *TestFile) Validate() error {
 
 		// -- Value
 		if len(header.Value) == 0 {
-			return errors.New("test file header must have 'value' fieldt")
+			return errors.New("test file header must have 'value' field")
 		}
 	}
 

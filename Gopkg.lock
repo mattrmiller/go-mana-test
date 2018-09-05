@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/ghodss/yaml"
+  packages = ["."]
+  revision = "0ca9ea5df5451ffdf184b4428c902747c2c11cd7"
+  version = "v1.0.0"
+
+[[projects]]
   name = "github.com/jawher/mow.cli"
   packages = [
     ".",
@@ -82,6 +88,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "52f135c82ecb8a83b4cab3e41fa5115e9047b56ee3ba293792b948e33165f71e"
+  inputs-digest = "4e784c72ab8a0d8f0d83647acfcf66b6be6cc2b34690bef20280f32248dc4181"
   solver-name = "gps-cdcl"
   solver-version = 1
