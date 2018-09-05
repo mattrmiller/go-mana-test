@@ -208,7 +208,7 @@ func (testFile *TestFile) Validate() error {
 func (testFile *TestFile) Test(projFile *ProjectFile) bool {
 
 	// Replace headers global values
-	var headers []TestHeader
+	headers := make([]TestHeader, 0)
 	for _, header := range testFile.RequestHeaders {
 		header.Value = ReplaceVars(header.Value, &projFile.Globals)
 		headers = append(headers, header)
