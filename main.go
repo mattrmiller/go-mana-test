@@ -14,7 +14,7 @@ import (
 // Constants
 const (
 	AppName    = "go-mana-test"
-	AppVersion = "1.0.0"
+	AppVersion = "0.1.2"
 )
 
 // Main execution point
