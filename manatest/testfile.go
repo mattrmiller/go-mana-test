@@ -244,6 +244,10 @@ func (testFile *TestFile) Test(projFile *ProjectFile) bool {
 		console.PrintVerbose("")
 		console.PrintVerbose(fmt.Sprintf("\tError saving cache: '%s'", err))
 		console.PrintVerbose("")
+		console.PrintVerbose("Request Body")
+		console.PrintVerbose(fmt.Sprintf("\t%s", client.Body.(string)))
+		console.PrintVerbose("")
+		console.PrintVerbose("Response Body")
 		console.PrintVerbose(fmt.Sprintf("\t%s", string(response.Body())))
 		console.PrintVerbose("")
 		return false
@@ -255,6 +259,10 @@ func (testFile *TestFile) Test(projFile *ProjectFile) bool {
 	if err != nil {
 		console.Print(fmt.Sprintf("\tFAIL: %s", err))
 		console.PrintVerbose("")
+		console.PrintVerbose("Request Body")
+		console.PrintVerbose(fmt.Sprintf("\t%s", client.Body.(string)))
+		console.PrintVerbose("")
+		console.PrintVerbose("Response Body")
 		console.PrintVerbose(fmt.Sprintf("\t%s", string(response.Body())))
 		console.PrintVerbose("")
 		return false

@@ -64,8 +64,13 @@ func ReplaceRandomString(str string) string {
 			// -- Generate random string
 			replace := brstrings.RandomAlphaNumString(num)
 
-			// -- Replace
-			str = strings.Replace(str, fmt.Sprintf("{{rand.string.%d}}", num), replace, -1)
+			// -- Replace, and then continue to replace with new random string, until there are no more replacements
+			// -- this allows for unique random strings if more than one are in a string
+			str2 := strings.Replace(str, fmt.Sprintf("{{rand.string.%d}}", num), replace, 1)
+			if str2 == str {
+				return str2
+			}
+			return ReplaceRandomString(str2)
 		}
 	}
 
@@ -89,8 +94,13 @@ func ReplaceRandomStringLower(str string) string {
 			// -- Generate random string
 			replace := brstrings.RandomString(num, "abcdefghijklmnopqrstuvwxyz0123456789")
 
-			// -- Replace
-			str = strings.Replace(str, fmt.Sprintf("{{rand.string.lower.%d}}", num), replace, -1)
+			// -- Replace, and then continue to replace with new random string, until there are no more replacements
+			// -- this allows for unique random strings if more than one are in a string
+			str2 := strings.Replace(str, fmt.Sprintf("{{rand.string.lower.%d}}", num), replace, 1)
+			if str2 == str {
+				return str2
+			}
+			return ReplaceRandomStringLower(str2)
 		}
 	}
 
@@ -115,8 +125,13 @@ func ReplaceRandomStringUpper(str string) string {
 			// -- Generate random string
 			replace := brstrings.RandomString(num, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 
-			// -- Replace
-			str = strings.Replace(str, fmt.Sprintf("{{rand.string.upper.%d}}", num), replace, -1)
+			// -- Replace, and then continue to replace with new random string, until there are no more replacements
+			// -- this allows for unique random strings if more than one are in a string
+			str2 := strings.Replace(str, fmt.Sprintf("{{rand.string.upper.%d}}", num), replace, -1)
+			if str2 == str {
+				return str2
+			}
+			return ReplaceRandomStringUpper(str2)
 		}
 	}
 
@@ -144,7 +159,11 @@ func ReplaceRandomNumber(str string) string {
 			replace := rand.Intn(max-min) + min
 
 			// -- Replace
-			str = strings.Replace(str, fmt.Sprintf("{{rand.num.%d.%d}}", min, max), strconv.Itoa(replace), -1)
+			str2 := strings.Replace(str, fmt.Sprintf("{{rand.num.%d.%d}}", min, max), strconv.Itoa(replace), -1)
+			if str2 == str {
+				return str2
+			}
+			return ReplaceRandomNumber(str2)
 		}
 	}
 
