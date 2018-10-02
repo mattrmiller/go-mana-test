@@ -67,6 +67,13 @@ func (app *AppTest) Run() {
 		os.Exit(1)
 	}
 
+	// Response times
+	var resTimeTally, resTimeMax, resTimeMin float64
+	var resTimeMaxName, resTimeMinName string
+	resTimeTally = 0
+	resTimeMax = 0
+	resTimeMin = -1
+
 	// Validate all files
 	for _, fileTest := range testFiles {
 
@@ -110,9 +117,18 @@ func (app *AppTest) Run() {
 			os.Exit(1)
 		}
 
-		// Calculate respjse time
+		// Calculate response time
 		timeEnd := time.Now()
 		resTimeMs := timeEnd.Sub(timeStart).Seconds() * 1000
+		resTimeTally += resTimeMs
+		if resTimeMs > resTimeMax {
+			resTimeMax = resTimeMs
+			resTimeMaxName = fileTest.Name
+		}
+		if resTimeMin == -1 || resTimeMs < resTimeMin {
+			resTimeMin = resTimeMs
+			resTimeMinName = fileTest.Name
+		}
 
 		// Output response times?
 		if app.optResTimes {
@@ -151,6 +167,16 @@ func (app *AppTest) Run() {
 		}
 	}
 
+	// Total files
+	totalFiles := len(testFiles)
+
+	// Output response times?
+	if app.optResTimes {
+		app.cns.PrintColor(fmt.Sprintf("\nAverage Response Time: %.2fms", resTimeTally/float64(totalFiles)), console.ColorYellow)
+		app.cns.PrintColor(fmt.Sprintf("Response Time Max : %.2fms - %s", resTimeMax, resTimeMaxName), console.ColorYellow)
+		app.cns.PrintColor(fmt.Sprintf("Response Time Min : %.2fms - %s", resTimeMin, resTimeMinName), console.ColorYellow)
+	}
+
 	// Dry run results
-	app.cns.PrintColor(fmt.Sprintf("\nAll %d tests passed tests!", len(testFiles)), console.ColorGreen)
+	app.cns.PrintColor(fmt.Sprintf("\nAll %d tests passed tests!", totalFiles), console.ColorGreen)
 }
