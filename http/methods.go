@@ -1,5 +1,5 @@
-// Package manatest provides the inner workings of go-mana-test.
-package manatest
+// Package http provides HTTP functionality for tests.
+package http
 
 // Imports
 import (

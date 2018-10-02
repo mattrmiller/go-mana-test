@@ -1,4 +1,4 @@
-// Package manatest provides the inner workings of go-mana-test.
+// Package manatest provides internal workings for go-mana-test.
 package manatest
 
 // Imports
@@ -69,7 +69,7 @@ func (projFile *ProjectFile) Validate() error {
 
 	// Must have a name
 	if len(projFile.Name) == 0 {
-		return errors.New("roject file must have `name` field")
+		return errors.New("project file must have `name` field")
 	}
 
 	// Must have a tests
