@@ -5,6 +5,7 @@ package app
 import (
 	"fmt"
 	"github.com/mattrmiller/go-mana-test/console"
+	"os"
 )
 
 // AppVersion structure handles all things related to the version app.
@@ -41,4 +42,5 @@ func (app *AppVersion) Run() {
 	app.cns.PrintColor(fmt.Sprintf("Version: %s", app.appVersion), console.ColorYellow)
 	app.cns.PrintColor(fmt.Sprintf("Build Date: %s", app.appBuildDate), console.ColorYellow)
 	app.cns.PrintColor(fmt.Sprintf("Git Hash: %s", app.appCommitHash), console.ColorYellow)
+	os.Exit(0)
 }

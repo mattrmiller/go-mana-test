@@ -3,10 +3,12 @@ package main
 
 // Imports
 import (
+	"fmt"
 	"github.com/jawher/mow.cli"
 	"github.com/mattrmiller/go-mana-test/app"
 	"github.com/mattrmiller/go-mana-test/console"
 	"os"
+	"runtime/debug"
 )
 
 // Constants.
@@ -31,13 +33,32 @@ func main() {
 	app := cli.App(AppName, "Making APIs Nice Again - Testing Framework")
 	app.Spec = "[ -c ]"
 
+	// Defer function to handle panic
+	defer func() {
+
+		// Recover from panic
+		if r := recover(); r != nil {
+
+			// Get stack
+			err, ok := r.(error)
+			if !ok {
+				err = fmt.Errorf("%v", r)
+			}
+
+			// Console
+			cns.PrintError(fmt.Sprintf("Internal Error: %s", err))
+			cns.PrintError(string(debug.Stack()))
+
+		}
+	}()
+
 	// Define our options
 	optColor := app.BoolOpt("c color", false, "Outputs console in color mode.")
 
 	// Define our commands
-	app.Command("version", "Shows version info", cmdVersion)
-	app.Command("validate", "Run validation of test files", cmdValidate)
-	app.Command("test", "Run tests", cmdTest)
+	app.Command("version", "Shows version info.", cmdVersion)
+	app.Command("validate", "Validate project and test files.", cmdValidate)
+	app.Command("test", "Run tests.", cmdTest)
 
 	// Before hook
 	app.Before = func() {
@@ -72,7 +93,7 @@ func cmdValidate(cmd *cli.Cmd) {
 	// Arguments
 	cmd.Spec = "PATH"
 	var (
-		pathProj = cmd.StringArg("PATH", "", "Path to project")
+		pathProj = cmd.StringArg("PATH", "", "Path to project.")
 	)
 
 	// Action
@@ -88,11 +109,11 @@ func cmdValidate(cmd *cli.Cmd) {
 func cmdTest(cmd *cli.Cmd) {
 
 	// Arguments
-	cmd.Spec = "[-bhp] PATH"
+	cmd.Spec = "[-bep] PATH"
 	var (
-		pathProj    = cmd.StringArg("PATH", "", "Path to project")
+		pathProj    = cmd.StringArg("PATH", "", "Path to project.")
 		optBodies   = cmd.BoolOpt("b bodies", false, "Outputs HTTP request and response bodies.")
-		optHault    = cmd.BoolOpt("h hault", false, "Haults on failed tests.")
+		optExit     = cmd.BoolOpt("e exit", false, "Exits on failed tests.")
 		optResTimes = cmd.BoolOpt("p perf", false, "Reports HTTP response time performance.")
 	)
 
@@ -100,7 +121,7 @@ func cmdTest(cmd *cli.Cmd) {
 	cmd.Action = func() {
 
 		// Setup validation app
-		app := app.NewAppTest(cns, *pathProj, *optBodies, *optHault, *optResTimes)
+		app := app.NewAppTest(cns, *pathProj, *optBodies, *optExit, *optResTimes)
 		app.Run()
 	}
 

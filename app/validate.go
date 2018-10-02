@@ -55,17 +55,19 @@ func (app *AppValidate) Run() {
 	// Validate all files
 	for _, fileTest := range testFiles {
 
+		// Print details
+		app.cns.Print(fmt.Sprintf("Test File: %s", fileTest.GetFilePath()))
+
 		// Validate the test file
 		err = fileTest.Validate()
 		if err != nil {
-			app.cns.PrintError(fmt.Sprintf("Error in test file: %s\n\t%s", fileTest.GetFilePath(), err))
+			app.cns.PrintError(fmt.Sprintf("\tValidation Result: FAIL: %s", err))
 			os.Exit(1)
 		}
-
-		// Run the test file
-		app.cns.Print(fmt.Sprintf("Found test file: %s", fileTest.GetFilePath()))
+		app.cns.PrintColor("\tValidation Result: PASSED!", console.ColorGreen)
 	}
 
 	// Results
 	app.cns.PrintColor(fmt.Sprintf("\nAll %d tests passed validation!", len(testFiles)), console.ColorGreen)
+	os.Exit(0)
 }

@@ -2,34 +2,67 @@
 
 ## Command Line
 ```bash
-Usage: go-mana-test [OPTIONS] COMMAND [arg...]
+Usage: go-mana-test [ -c ] COMMAND [arg...]
 
 Making APIs Nice Again - Testing Framework
-                  
-Options:          
-  -v, --verbose   Verbose mode
-                  
-Commands:         
-  version         Shows version info
-  test            Run tests
-                  
+                
+Options:        
+  -c, --color   Outputs console in color mode.
+                
+Commands:       
+  version       Shows version info.
+  validate      Validate project and test files.
+  test          Run tests.
+                
 Run 'go-mana-test COMMAND --help' for more information on a command.
 ```
 
-#### Testing
-Testing is done by pointing to your [project file](#project-file).
+#### Validate
+```bash
+Usage: go-mana-test validate PATH
+
+Validate project and test files.
+               
+Arguments:     
+  PATH         Path to project.
+```
+You can validate your project and test files by using the validate command [project file](#project-file).
+```bash
+go-mana-test validate ./exampleproj/project.yml
+```
+
+#### Test
+```bash
+Usage: go-mana-test test [-bhp] PATH
+
+Run tests.
+                 
+Arguments:       
+  PATH           Path to project.
+                 
+Options:         
+  -b, --bodies   Outputs HTTP request and response bodies.
+  -e, --exit     Exits on failed tests.
+  -p, --perf     Reports HTTP response time performance.
+```
+You can run your tests by using the test command [project file](#project-file).
 ```bash
 go-mana-test test ./exampleproj/project.yml
 ```
 
-You can add a verbose flag to output more information.
+The `bodies` option can be added to output HTTP request and response bodies.
 ```bash
-go-mana-test -v test ./exampleproj/project.yml
+go-mana-test test -b ./exampleproj/project.yml
 ```
 
-You can also do a dry run, which will just collect and validate test files but not actually run them.
+The `exit` option can be added to exit when a test has failed.
 ```bash
-go-mana-test test ./exampleproj/project.yml -d
+go-mana-test test -e ./exampleproj/project.yml
+```
+
+The `perf` option can be added to display HTTP response time calculations for each test, the overall average, the minimum, and maximum, response time.
+```bash
+go-mana-test test -p ./exampleproj/project.yml
 ```
 
 ## Project File
@@ -116,6 +149,12 @@ So for the sample [project file](#project-file) above, referencing the ser Agent
 "{{globals.USER_AGENT}}"
 ```
 
+#### Environment Variables
+Environment variables are defined on your Operating System. The full syntax is:
+```yaml
+"{{env.MY_ENV_VARIABLE}}" 
+```
+
 #### Cache
 Cache variables are defined in the [test file](#test-cache). The full syntax is:
 ```yaml
@@ -133,13 +172,13 @@ Generates a random alpha-numeric string of a certain length. The syntax to gener
 "{{rand.string.50}}"
 ```
 
-#### Random String
+#### Random Lowercase String
 Generates a random lowercase alpha-numeric string of a certain length. The syntax to generate a string of length 60 is:
 ```yaml
 "{{rand.string.lower.60}}"
 ```
 
-#### Random String
+#### Random Uppercase String
 Generates a random uppercase alpha-numeric string of a certain length. The syntax to generate a string of length 70 is:
 ```yaml
 "{{rand.string.upper.70}}"

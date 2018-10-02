@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/mattrmiller/go-bedrock/brstrings"
 	"math/rand"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -15,19 +16,26 @@ import (
 // ReplaceVars Replaces variables in a string.
 func ReplaceVars(str string, vars *[]ProjectGlobal) string {
 
-	// Replace global variables
-	str = ReplaceGlobalVars(str, vars)
+	// Only if we have variables to replace
+	if strings.Contains(str, "{{") && strings.Contains(str, "}}") {
 
-	// Replace random strings
-	str = ReplaceRandomString(str)
-	str = ReplaceRandomStringLower(str)
-	str = ReplaceRandomStringUpper(str)
+		// Replace global variables
+		str = ReplaceGlobalVars(str, vars)
 
-	// Replace random number
-	str = ReplaceRandomNumber(str)
+		// Replace environment variables
+		str = ReplaceEnvironmentVars(str)
 
-	// Replace cache
-	str = ReplaceCache(str)
+		// Replace random strings
+		str = ReplaceRandomString(str)
+		str = ReplaceRandomStringLower(str)
+		str = ReplaceRandomStringUpper(str)
+
+		// Replace random number
+		str = ReplaceRandomNumber(str)
+
+		// Replace cache
+		str = ReplaceCache(str)
+	}
 
 	return str
 }
@@ -36,11 +44,22 @@ func ReplaceVars(str string, vars *[]ProjectGlobal) string {
 func ReplaceGlobalVars(str string, vars *[]ProjectGlobal) string {
 
 	// Only replace if we have our context
-	if strings.Contains(str, "{{") && len(*vars) != 0 {
-		for _, val := range *vars {
-			replace := fmt.Sprintf("{{globals.%s}}", val.Key)
-			str = strings.Replace(str, replace, val.Value, -1)
-		}
+	for _, val := range *vars {
+		replace := fmt.Sprintf("{{globals.%s}}", val.Key)
+		str = strings.Replace(str, replace, val.Value, -1)
+	}
+
+	return str
+}
+
+// ReplaceEnvironmentVars Replaces environment variables.
+func ReplaceEnvironmentVars(str string) string {
+
+	// Each environment variable
+	for _, env := range os.Environ() {
+		pair := strings.Split(env, "=")
+		replace := fmt.Sprintf("{{env.%s}}", pair[0])
+		str = strings.Replace(str, replace, pair[1], -1)
 	}
 
 	return str

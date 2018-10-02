@@ -25,21 +25,21 @@ type AppTest struct {
 	// optBodies holds the options to output HTTP bodies.
 	optBodies bool
 
-	// optHault holds the options to hault on failed tests.
-	optHault bool
+	// optExit holds the options to hault on failed tests.
+	optExit bool
 
 	// optResTimes holds the options to calculate response times.
 	optResTimes bool
 }
 
 // NewAppTest creates a new test app.
-func NewAppTest(cns *console.Console, pathProj string, optBodies bool, optHault bool, optResTimes bool) *AppTest {
+func NewAppTest(cns *console.Console, pathProj string, optBodies bool, optExit bool, optResTimes bool) *AppTest {
 
 	return &AppTest{
 		cns:         cns,
 		pathProj:    pathProj,
 		optBodies:   optBodies,
-		optHault:    optHault,
+		optExit:     optExit,
 		optResTimes: optResTimes,
 	}
 }
@@ -74,6 +74,11 @@ func (app *AppTest) Run() {
 	resTimeMax = 0
 	resTimeMin = -1
 
+	// Test count
+	var countTestSucc, countTestFail int
+	countTestSucc = 0
+	countTestFail = 0
+
 	// Validate all files
 	for _, fileTest := range testFiles {
 
@@ -91,8 +96,8 @@ func (app *AppTest) Run() {
 		testURL := fileTest.MakeTestURL(projFile)
 
 		// Console
-		app.cns.Print(fmt.Sprintf("\nRunning test: %s...", fileTest.Name))
-		app.cns.Print(fmt.Sprintf("\t%s: %s", fileTest.RequestMethod, testURL))
+		app.cns.Print(fmt.Sprintf("--\nRunning Test: %s...", fileTest.Name))
+		app.cns.PrintColor(fmt.Sprintf("\t%s: %s", fileTest.RequestMethod, testURL), console.ColorMagenta)
 
 		// Prepare resty client
 		resty.SetDebug(false)
@@ -132,38 +137,39 @@ func (app *AppTest) Run() {
 
 		// Output response times?
 		if app.optResTimes {
-			app.cns.PrintColor(fmt.Sprintf("\n\tResponse Time: %.2fms", resTimeMs), console.ColorYellow)
+			app.cns.PrintColor(fmt.Sprintf("\tResponse Time: %.2fms", resTimeMs), console.ColorYellow)
 		}
 
 		// Verbose bodies
 		if app.optBodies {
 			if client.Body != nil {
-				app.cns.PrintColor("\n\tRequest Body:", console.ColorCyan)
-				app.cns.PrintColor(fmt.Sprintf("\t\t%s\n\n", client.Body.(string)), console.ColorCyan)
+				app.cns.PrintColor("\tRequest Body:", console.ColorCyan)
+				app.cns.PrintColor(fmt.Sprintf("\t\t%s", client.Body.(string)), console.ColorCyan)
 			}
 			if response.RawResponse != nil {
-				app.cns.PrintColor("\n\tResponse Body:", console.ColorCyan)
-				app.cns.PrintColor(fmt.Sprintf("\t\t%s\n\n", string(response.Body())), console.ColorCyan)
+				app.cns.PrintColor("\tResponse Body:", console.ColorCyan)
+				app.cns.PrintColor(fmt.Sprintf("\t\t%s", string(response.Body())), console.ColorCyan)
 			}
 		}
 
 		// Save cache
 		err = manatest.SaveCacheFromResponse(&fileTest.Cache, response)
 		if err != nil {
-			app.cns.PrintError(fmt.Sprintf("\n\tError saving cache: %s", err))
+			app.cns.PrintError(fmt.Sprintf("\tError saving cache: %s", err))
 			os.Exit(1)
 		}
 
 		// Run tests
-		app.cns.Print("\tRunning checks...")
 		err = manatest.RunChecks(&fileTest.Checks, &projFile.Globals, response)
 		if err != nil {
-			app.cns.PrintError(fmt.Sprintf("\tFAIL: %s\n", err))
-			if app.optHault {
+			countTestFail++
+			app.cns.PrintError(fmt.Sprintf("\tTest Result: FAIL: %s", err))
+			if app.optExit {
 				os.Exit(1)
 			}
 		} else {
-			app.cns.PrintColor("\tPASSED!", console.ColorGreen)
+			countTestSucc++
+			app.cns.PrintColor("\tTest Result: PASSED!", console.ColorGreen)
 		}
 	}
 
@@ -172,11 +178,20 @@ func (app *AppTest) Run() {
 
 	// Output response times?
 	if app.optResTimes {
-		app.cns.PrintColor(fmt.Sprintf("\nAverage Response Time: %.2fms", resTimeTally/float64(totalFiles)), console.ColorYellow)
+		app.cns.Print("--")
+		app.cns.PrintColor(fmt.Sprintf("Average Response Time: %.2fms", resTimeTally/float64(totalFiles)), console.ColorYellow)
 		app.cns.PrintColor(fmt.Sprintf("Response Time Max : %.2fms - %s", resTimeMax, resTimeMaxName), console.ColorYellow)
 		app.cns.PrintColor(fmt.Sprintf("Response Time Min : %.2fms - %s", resTimeMin, resTimeMinName), console.ColorYellow)
 	}
 
-	// Dry run results
-	app.cns.PrintColor(fmt.Sprintf("\nAll %d tests passed tests!", totalFiles), console.ColorGreen)
+	// Results
+	app.cns.Print("--")
+	app.cns.PrintColor(fmt.Sprintf("Passing Tests: %d", countTestSucc), console.ColorGreen)
+	if countTestFail != 0 {
+		app.cns.PrintError(fmt.Sprintf("Failing Tests: %d", countTestFail))
+		os.Exit(1)
+	} else {
+		os.Exit(0)
+	}
+
 }
