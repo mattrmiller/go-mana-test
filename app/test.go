@@ -3,6 +3,8 @@ package app
 
 // Imports
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/mattrmiller/go-mana-test/console"
 	"github.com/mattrmiller/go-mana-test/manatest"
@@ -50,12 +52,12 @@ func (app *AppTest) Run() {
 	// Read project file
 	projFile, err := manatest.ReadProjectFile(app.pathProj)
 	if err != nil {
-		app.cns.PrintError(fmt.Sprintf("Error reading project file: %s\n\t%s", app.pathProj, err))
+		app.cns.PrintError(fmt.Sprintf("Error reading project file: %s\n%s", app.pathProj, err))
 		os.Exit(1)
 	}
 	err = projFile.Validate()
 	if err != nil {
-		app.cns.PrintError(fmt.Sprintf("Error in project file: %s\n\t%s", app.pathProj, err))
+		app.cns.PrintError(fmt.Sprintf("Error in project file: %s\n%s", app.pathProj, err))
 		os.Exit(1)
 	}
 
@@ -85,7 +87,7 @@ func (app *AppTest) Run() {
 		// Validate the test file
 		err = fileTest.Validate()
 		if err != nil {
-			app.cns.PrintError(fmt.Sprintf("Error in test file: %s\n\t%s", fileTest.GetFilePath(), err))
+			app.cns.PrintError(fmt.Sprintf("Error in test file: %s\n%s", fileTest.GetFilePath(), err))
 			os.Exit(1)
 		}
 
@@ -97,7 +99,7 @@ func (app *AppTest) Run() {
 
 		// Console
 		app.cns.Print(fmt.Sprintf("--\nRunning Test: %s...", fileTest.Name))
-		app.cns.PrintColor(fmt.Sprintf("\t%s: %s", fileTest.RequestMethod, testURL), console.ColorMagenta)
+		app.cns.PrintColor(fmt.Sprintf("%s: %s", fileTest.RequestMethod, testURL), console.ColorMagenta)
 
 		// Prepare resty client
 		resty.SetDebug(false)
@@ -118,7 +120,7 @@ func (app *AppTest) Run() {
 		// Run
 		response, err := client.Execute(fileTest.RequestMethod, testURL)
 		if err != nil {
-			app.cns.PrintError(fmt.Sprintf("\tError executing HTTP request: %s", err))
+			app.cns.PrintError(fmt.Sprintf("Error executing HTTP request: %s", err))
 			os.Exit(1)
 		}
 
@@ -137,25 +139,37 @@ func (app *AppTest) Run() {
 
 		// Output response times?
 		if app.optResTimes {
-			app.cns.PrintColor(fmt.Sprintf("\tResponse Time: %.2fms", resTimeMs), console.ColorYellow)
+			app.cns.PrintColor(fmt.Sprintf("Response Time: %.2fms", resTimeMs), console.ColorYellow)
 		}
 
 		// Verbose bodies
 		if app.optBodies {
 			if client.Body != nil {
-				app.cns.PrintColor("\tRequest Body:", console.ColorCyan)
-				app.cns.PrintColor(fmt.Sprintf("\t\t%s", client.Body.(string)), console.ColorCyan)
+				app.cns.PrintColor("Request Body:", console.ColorCyan)
+				var jsonPretty bytes.Buffer
+				err := json.Indent(&jsonPretty, []byte(client.Body.(string)), "", "    ")
+				if err != nil {
+					app.cns.PrintError(fmt.Sprintf("Error outputting request body: %s", err))
+					os.Exit(1)
+				}
+				app.cns.PrintColor(fmt.Sprintf("%s", jsonPretty.String()), console.ColorCyan)
 			}
-			if response.RawResponse != nil {
-				app.cns.PrintColor("\tResponse Body:", console.ColorCyan)
-				app.cns.PrintColor(fmt.Sprintf("\t\t%s", string(response.Body())), console.ColorCyan)
+			if response.RawResponse != nil && len(response.Body()) != 0 {
+				var jsonPretty bytes.Buffer
+				err := json.Indent(&jsonPretty, response.Body(), "", "    ")
+				if err != nil {
+					app.cns.PrintError(fmt.Sprintf("Error outputting response body: %s", err))
+					os.Exit(1)
+				}
+				app.cns.PrintColor("Response Body:", console.ColorCyan)
+				app.cns.PrintColor(fmt.Sprintf("%s", jsonPretty.String()), console.ColorCyan)
 			}
 		}
 
 		// Save cache
 		err = manatest.SaveCacheFromResponse(&fileTest.Cache, response)
 		if err != nil {
-			app.cns.PrintError(fmt.Sprintf("\tError saving cache: %s", err))
+			app.cns.PrintError(fmt.Sprintf("Error saving cache: %s", err))
 			os.Exit(1)
 		}
 
@@ -163,13 +177,13 @@ func (app *AppTest) Run() {
 		err = manatest.RunChecks(&fileTest.Checks, &projFile.Globals, response)
 		if err != nil {
 			countTestFail++
-			app.cns.PrintError(fmt.Sprintf("\tTest Result: FAIL: %s", err))
+			app.cns.PrintError(fmt.Sprintf("Test Result: FAIL: %s", err))
 			if app.optExit {
 				os.Exit(1)
 			}
 		} else {
 			countTestSucc++
-			app.cns.PrintColor("\tTest Result: PASSED!", console.ColorGreen)
+			app.cns.PrintColor("Test Result: PASSED!", console.ColorGreen)
 		}
 	}
 
