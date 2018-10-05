@@ -61,6 +61,14 @@ func ReadProjectFile(pathFile string) (*ProjectFile, error) {
 	// Set path
 	projFile.filePath = pathFile
 
+	// Replace global
+	globals := make([]ProjectGlobal, 0)
+	for _, global := range projFile.Globals {
+		global.Value = ReplaceVarsInGlobal(global.Value)
+		globals = append(globals, global)
+	}
+	projFile.Globals = globals
+
 	return &projFile, nil
 }
 

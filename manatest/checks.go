@@ -41,7 +41,7 @@ func RunChecks(checks *[]TestChecks, vars *[]ProjectGlobal, response *resty.Resp
 	for _, check := range *checks {
 
 		// Replace variables
-		check.Value = ReplaceVars(check.Value, vars)
+		check.Value = ReplaceVarsInCheck(check.Value, vars)
 
 		// Check response code
 		if strings.HasPrefix(check.Check, CheckResCode) {

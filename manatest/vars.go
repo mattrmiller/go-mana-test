@@ -13,8 +13,49 @@ import (
 	"time"
 )
 
-// ReplaceVars Replaces variables in a string.
-func ReplaceVars(str string, vars *[]ProjectGlobal) string {
+// ReplaceVarsInGlobal Replaces variables in global.
+func ReplaceVarsInGlobal(str string) string {
+
+	// Only if we have variables to replace
+	if strings.Contains(str, "{{") && strings.Contains(str, "}}") {
+
+		// Replace environment variables
+		str = ReplaceEnvironmentVars(str)
+
+		// Replace random strings
+		str = ReplaceRandomString(str)
+		str = ReplaceRandomStringLower(str)
+		str = ReplaceRandomStringUpper(str)
+
+		// Replace random number
+		str = ReplaceRandomNumber(str)
+	}
+
+	return str
+}
+
+// ReplaceVarsInRequestBody Replaces variables in a request body.
+func ReplaceVarsInRequestBody(str string, vars *[]ProjectGlobal) string {
+	return replaceAllVars(str, vars)
+}
+
+// ReplaceVarsInCheck Replaces variables in a test check.
+func ReplaceVarsInCheck(str string, vars *[]ProjectGlobal) string {
+	return replaceAllVars(str, vars)
+}
+
+// ReplaceVarsInHeader Replaces variables in a test check.
+func ReplaceVarsInHeader(str string, vars *[]ProjectGlobal) string {
+	return replaceAllVars(str, vars)
+}
+
+// ReplaceVarsInTestURL Replaces variables in a test URL.
+func ReplaceVarsInTestURL(str string, vars *[]ProjectGlobal) string {
+	return replaceAllVars(str, vars)
+}
+
+// replaceAllVars Replaces all types of variables.
+func replaceAllVars(str string, vars *[]ProjectGlobal) string {
 
 	// Only if we have variables to replace
 	if strings.Contains(str, "{{") && strings.Contains(str, "}}") {

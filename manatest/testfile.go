@@ -208,7 +208,7 @@ func (testFile *TestFile) MakeTestHeaders(projFile *ProjectFile) []TestHeader {
 	// Replace headers global values
 	headers := make([]TestHeader, 0)
 	for _, header := range testFile.RequestHeaders {
-		header.Value = ReplaceVars(header.Value, &projFile.Globals)
+		header.Value = ReplaceVarsInHeader(header.Value, &projFile.Globals)
 		headers = append(headers, header)
 	}
 
@@ -217,7 +217,7 @@ func (testFile *TestFile) MakeTestHeaders(projFile *ProjectFile) []TestHeader {
 
 // MaketestURL Prepares HTTP URL for the test but replacing necessary variables.
 func (testFile *TestFile) MakeTestURL(projFile *ProjectFile) string {
-	return ReplaceVars(testFile.URL, &projFile.Globals)
+	return ReplaceVarsInTestURL(testFile.URL, &projFile.Globals)
 }
 
 // GetPath Gets the path of the test file.

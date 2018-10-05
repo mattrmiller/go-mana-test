@@ -76,7 +76,7 @@ globals:
 ```
  - name: Defines the name of your project.
  - tests: Defines the path to your [test files](#test-file), relative to the path this project file is in.
- - globals: Defiles key/value global [variables](#variables) that can be later used in your tests.
+ - globals: Defines key/value global [variables](#variables) that can be later used in your tests.
  
 ## Test File
 The test file defines a single test for your project. Here is an example of a test file.
@@ -143,10 +143,31 @@ Global variables are defined in the [project file](#project-file). The full synt
 ```yaml
 "{{globals.MY_GLOBAL_VARIABLE}}"
 ```
+Can be used in:
+ - Test URL
+ - Test request header
+ - Test request body
+ - Test check value
 
-So for the sample [project file](#project-file) above, referencing the ser Agent would be:
+For the sample [project file](#project-file) above, referencing the User Agent would be:
 ```yaml
 "{{globals.USER_AGENT}}"
+```
+ 
+#### Cache
+Cache variables are defined in the [test file](#test-cache). The full syntax is:
+```yaml
+"{{cache.MY_CACHE_VARIABLE}}" 
+```
+Can be used in:
+ - Test URL
+ - Test request header
+ - Test request body
+ - Test check value
+ 
+For the sample [test file](#test-file) above, referencing the Username would be:
+```yaml
+"{{cache.user_profile.username}}"
 ```
 
 #### Environment Variables
@@ -154,42 +175,61 @@ Environment variables are defined on your Operating System. The full syntax is:
 ```yaml
 "{{env.MY_ENV_VARIABLE}}" 
 ```
-
-#### Cache
-Cache variables are defined in the [test file](#test-cache). The full syntax is:
-```yaml
-"{{cache.MY_CACHE_VARIABLE}}" 
-```
-
-So for the sample [test file](#test-file) above, referencing the Username would be:
-```yaml
-"{{cache.user_profile.username}}"
-```
-
+Can be used in:
+ - Project globals
+ - Test URL
+ - Test request header
+ - Test request body
+ - Test check value
+ 
 #### Random String
 Generates a random alpha-numeric string of a certain length. The syntax to generate a string of length 50 is:
 ```yaml
 "{{rand.string.50}}"
 ```
-
+Can be used in:
+ - Project globals
+ - Test URL
+ - Test request header
+ - Test request body
+ - Test check value
+ 
 #### Random Lowercase String
 Generates a random lowercase alpha-numeric string of a certain length. The syntax to generate a string of length 60 is:
 ```yaml
 "{{rand.string.lower.60}}"
 ```
-
+Can be used in:
+ - Project globals
+ - Test URL
+ - Test request header
+ - Test request body
+ - Test check value
+ 
 #### Random Uppercase String
 Generates a random uppercase alpha-numeric string of a certain length. The syntax to generate a string of length 70 is:
 ```yaml
 "{{rand.string.upper.70}}"
 ```
-
+Can be used in:
+ - Project globals
+ - Test URL
+ - Test request header
+ - Test request body
+ - Test check value
+ 
 #### Random Number
 Generates a random number in between a certain range. The syntax to generate a number between 1 and 100 is:
 ```yaml
 "{{rand.num.1.100}}"
 ```
-
+Can be used in:
+ - Project globals
+ - Test URL
+ - Test request header
+ - Test request body
+ - Test check value
+ 
 ## JSON Query
 
 #### Path Syntax

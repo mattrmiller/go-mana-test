@@ -111,7 +111,7 @@ func (app *AppTest) Run() {
 
 		// Set body
 		if fileTest.ReqBody != nil && fileTest.RequestMethod != http.MethodTrace {
-			client.SetBody(manatest.ReplaceVars(fileTest.ReqBody.(string), &projFile.Globals))
+			client.SetBody(manatest.ReplaceVarsInRequestBody(fileTest.ReqBody.(string), &projFile.Globals))
 		}
 
 		// Always calculate response times to save on logic check costs
