@@ -1,10 +1,11 @@
-// Package manatest provides the inner workings of go-mana-test.
+// Package manatest provides internal workings for go-mana-test.
 package manatest
 
 // Imports
 import (
 	"fmt"
 	"github.com/mattrmiller/go-bedrock/brtesting"
+	"os"
 	"testing"
 )
 
@@ -25,6 +26,18 @@ func TestReplaceGlobalVars(tst *testing.T) {
 	str := "{{globals.DOG_NAME}} is my dog. {{globals.CAT_NAME}} is my cat."
 	str = ReplaceGlobalVars(str, &vars)
 	brtesting.AssertEqual(tst, str, "Tucker is my dog. Fluffy is my cat.", "ReplaceGlobalVars failed for valid globals.")
+
+}
+
+// Test ReplaceEnvironmentVars.
+func TestReplaceEnvironmentVars(tst *testing.T) {
+
+	// Variables
+	os.Setenv("DOG_NAME", "Tucker")
+	os.Setenv("CAT_NAME", "Fluffy")
+	str := "{{env.DOG_NAME}} is my dog. {{env.CAT_NAME}} is my cat."
+	str = ReplaceEnvironmentVars(str)
+	brtesting.AssertEqual(tst, str, "Tucker is my dog. Fluffy is my cat.", "ReplaceEnvironmentVars failed for environment variables.")
 
 }
 

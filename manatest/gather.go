@@ -1,11 +1,11 @@
-// Package manatest provides the inner workings of go-mana-test.
+// Package manatest provides internal workings for go-mana-test.
 package manatest
 
 // Imports
 import (
 	"fmt"
-	"github.com/mattrmiller/go-mana-test/console"
 	"os"
+	"path"
 	"path/filepath"
 	"sort"
 )
@@ -22,26 +22,29 @@ func GatherTestFiles(pathRead string) ([]TestFile, error) {
 	files := make([]TestFile, 0)
 	err := filepath.Walk(pathRead, func(pathFile string, fileInfo os.FileInfo, _ error) error {
 
-		// Check if yml
-		isYml, err := filepath.Match("*.yml", fileInfo.Name())
-		if err != nil {
-			return err
-		}
+		// Read directories and sort yaml files by name
+		if fileInfo.IsDir() {
 
-		// Only yml files
-		if isYml {
-
-			// Read the test file
-			testFile, err := ReadTestFile(pathFile)
+			// Yaml files
+			yamlFiles, err := dirReadYamlFiles(pathFile)
 			if err != nil {
 				return err
 			}
 
-			// Add
-			files = append(files, *testFile)
+			// Read test files
+			for _, yamlFile := range yamlFiles {
 
-			// Console print
-			console.PrintVerbose(fmt.Sprintf("Found test file at: %s", pathFile))
+				// Read the test file
+				testFile, err := ReadTestFile(path.Join(pathFile, yamlFile.Name()))
+				if err != nil {
+					return err
+				}
+
+				// Add
+				files = append(files, *testFile)
+
+			}
+
 		}
 
 		return nil
@@ -56,4 +59,52 @@ func GatherTestFiles(pathRead string) ([]TestFile, error) {
 	})
 
 	return files, nil
+}
+
+// dirReadYamlFiles Reads finds and sorts yaml files for a single directory.
+func dirReadYamlFiles(pathDir string) ([]os.FileInfo, error) {
+
+	// Files for return
+	var ret []os.FileInfo
+
+	// Open directory
+	fileDir, err := os.Open(pathDir)
+	if err != nil {
+		return nil, err
+	}
+
+	// Read directory
+	dirInfo, err := fileDir.Readdir(-1)
+	fileDir.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	// Iterate through each file
+	for _, fileInfo := range dirInfo {
+
+		// Only if file
+		if !fileInfo.IsDir() {
+
+			// Check if yml
+			isYml, err := filepath.Match("*.yml", fileInfo.Name())
+			if err != nil {
+				return nil, err
+			}
+
+			// Only yml files
+			if isYml {
+
+				// Append
+				ret = append(ret, fileInfo)
+			}
+		}
+	}
+
+	// Sort test files by name
+	sort.Slice(ret, func(i, j int) bool {
+		return ret[i].Name() <= ret[j].Name()
+	})
+
+	return ret, nil
 }

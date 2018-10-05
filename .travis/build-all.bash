@@ -24,7 +24,7 @@ if [[ "$(pwd)" != "${DEP_ROOT}" ]]; then
 fi
 
 GO_BUILD_CMD="go build -a -installsuffix cgo"
-GO_BUILD_LDFLAGS="-s -w -X main.commitHash=${COMMIT_HASH} -X main.buildDate=${DATE} -X main.version=${VERSION} -X main.flagImportDuringSolve=${IMPORT_DURING_SOLVE}"
+GO_BUILD_LDFLAGS="-s -w -X main.AppCommitHash=${COMMIT_HASH} -X main.AppBuildDate=${DATE} -X main.AppVersion=${VERSION}"
 
 if [[ -z "${DEP_BUILD_PLATFORMS}" ]]; then
     DEP_BUILD_PLATFORMS="linux windows darwin freebsd"

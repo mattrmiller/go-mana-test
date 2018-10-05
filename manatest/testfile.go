@@ -1,4 +1,4 @@
-// Package manatest provides the inner workings of go-mana-test.
+// Package manatest provides internal workings for go-mana-test.
 package manatest
 
 // Imports
@@ -6,11 +6,9 @@ import (
 	"errors"
 	"fmt"
 	yaml2 "github.com/ghodss/yaml"
-	"github.com/mattrmiller/go-mana-test/console"
-	"gopkg.in/resty.v1"
+	"github.com/mattrmiller/go-mana-test/http"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
-	"net/http"
 	"path/filepath"
 	"strings"
 )
@@ -123,7 +121,7 @@ func (testFile *TestFile) Validate() error {
 	if len(testFile.RequestMethod) == 0 {
 		return errors.New("test file must have 'method' field")
 	}
-	if !ValidateMethod(&testFile.RequestMethod) {
+	if !http.ValidateMethod(&testFile.RequestMethod) {
 		return errors.New("test file has invalid 'method' field")
 	}
 
@@ -149,12 +147,12 @@ func (testFile *TestFile) Validate() error {
 	// Validate headers
 	for _, header := range testFile.RequestHeaders {
 
-		// -- Key
+		// Key
 		if len(header.Key) == 0 {
 			return errors.New("test file header must have 'key' field")
 		}
 
-		// -- Value
+		// Value
 		if len(header.Value) == 0 {
 			return errors.New("test file header must have 'value' field")
 		}
@@ -163,12 +161,12 @@ func (testFile *TestFile) Validate() error {
 	// Validate checks
 	for _, check := range testFile.Checks {
 
-		// -- Name
+		// Name
 		if len(check.Name) == 0 {
 			return errors.New("test file check must have 'name' fieldt")
 		}
 
-		// -- Check
+		// Check
 		if len(check.Check) == 0 {
 			return errors.New("test file check must have 'check' field")
 		}
@@ -177,7 +175,7 @@ func (testFile *TestFile) Validate() error {
 			return fmt.Errorf("test file check has an invalid 'check' field: `%s'", check.Check)
 		}
 
-		// -- Check
+		// Check
 		if len(check.Value) == 0 {
 			return errors.New("test file check must have 'value' field")
 		}
@@ -186,12 +184,12 @@ func (testFile *TestFile) Validate() error {
 	// Validate cache
 	for _, cache := range testFile.Cache {
 
-		// -- Name
+		// Name
 		if len(cache.Name) == 0 {
 			return errors.New("test file cache must have 'name' field")
 		}
 
-		// -- Value
+		// Value
 		if len(cache.Value) == 0 {
 			return errors.New("test file cache must have 'value' field")
 		}
@@ -204,74 +202,22 @@ func (testFile *TestFile) Validate() error {
 	return nil
 }
 
-// Test Runs the test.
-func (testFile *TestFile) Test(projFile *ProjectFile) bool {
+// MakeTestHeaders Prepares HTTP headers for the test but replacing necessary variables.
+func (testFile *TestFile) MakeTestHeaders(projFile *ProjectFile) []TestHeader {
 
 	// Replace headers global values
 	headers := make([]TestHeader, 0)
 	for _, header := range testFile.RequestHeaders {
-		header.Value = ReplaceVars(header.Value, &projFile.Globals)
+		header.Value = ReplaceVarsInHeader(header.Value, &projFile.Globals)
 		headers = append(headers, header)
 	}
-	testFile.RequestHeaders = headers
 
-	// Lets for the URL, with substitutions
-	url := ReplaceVars(testFile.URL, &projFile.Globals)
+	return headers
+}
 
-	// Console
-	console.Print(fmt.Sprintf("Running test: %s...", testFile.Name))
-	console.Print(fmt.Sprintf("\t%s: %s", testFile.RequestMethod, url))
-
-	// Get client
-	client := testFile.getRestyClient()
-
-	// Set body
-	if testFile.ReqBody != nil && testFile.RequestMethod != http.MethodTrace {
-		client.SetBody(ReplaceVars(testFile.ReqBody.(string), &projFile.Globals))
-	}
-
-	// Run
-	console.Print("\tRunning request...")
-	response, err := client.Execute(testFile.RequestMethod, url)
-	if err != nil {
-		console.Print(fmt.Sprintf("\tFAIL: %s", err))
-		return false
-	}
-
-	// Save cache
-	err = SaveCacheFromResponse(&testFile.Cache, response)
-	if err != nil {
-		console.PrintVerbose("")
-		console.PrintVerbose(fmt.Sprintf("\tError saving cache: '%s'", err))
-		console.PrintVerbose("")
-		console.PrintVerbose("Request Body")
-		console.PrintVerbose(fmt.Sprintf("\t%s", client.Body.(string)))
-		console.PrintVerbose("")
-		console.PrintVerbose("Response Body")
-		console.PrintVerbose(fmt.Sprintf("\t%s", string(response.Body())))
-		console.PrintVerbose("")
-		return false
-	}
-
-	// Run tests
-	console.Print("\tRunning checks...")
-	err = RunChecks(&testFile.Checks, &projFile.Globals, response)
-	if err != nil {
-		console.Print(fmt.Sprintf("\tFAIL: %s", err))
-		console.PrintVerbose("")
-		console.PrintVerbose("Request Body")
-		console.PrintVerbose(fmt.Sprintf("\t%s", client.Body.(string)))
-		console.PrintVerbose("")
-		console.PrintVerbose("Response Body")
-		console.PrintVerbose(fmt.Sprintf("\t%s", string(response.Body())))
-		console.PrintVerbose("")
-		return false
-	}
-
-	// -- Console
-	console.Print("\tPASSED!")
-
-	return true
+// MaketestURL Prepares HTTP URL for the test but replacing necessary variables.
+func (testFile *TestFile) MakeTestURL(projFile *ProjectFile) string {
+	return ReplaceVarsInTestURL(testFile.URL, &projFile.Globals)
 }
 
 // GetPath Gets the path of the test file.
@@ -282,22 +228,4 @@ func (testFile *TestFile) GetPath() string {
 // GetFilePath Gets the path to the test file.
 func (testFile *TestFile) GetFilePath() string {
 	return testFile.filePath
-}
-
-// getRestyClient Gets a resty client.
-func (testFile *TestFile) getRestyClient() *resty.Request {
-
-	// Turn off debug
-	resty.SetDebug(false)
-
-	// Create client
-	client := resty.NewRequest().
-		SetContentLength(true)
-
-	// Set headers
-	for _, header := range testFile.RequestHeaders {
-		client = client.SetHeader(header.Key, header.Value)
-	}
-
-	return client
 }

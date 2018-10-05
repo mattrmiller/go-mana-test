@@ -1,18 +1,18 @@
-// Package manatest provides the inner workings of go-mana-test.
+// Package manatest provides internal workings for go-mana-test.
 package manatest
 
 // Imports
 import (
 	"errors"
 	"fmt"
-	"github.com/mattrmiller/go-mana-test/console"
+	"github.com/mattrmiller/go-mana-test/http"
 	"github.com/tidwall/gjson"
 	"gopkg.in/resty.v1"
 	"strconv"
 	"strings"
 )
 
-// Checks
+// Checks.
 const (
 	CheckResCode     = "response.code"
 	CheckResBodyJSON = "response.body.json"
@@ -40,13 +40,10 @@ func RunChecks(checks *[]TestChecks, vars *[]ProjectGlobal, response *resty.Resp
 	// Each check
 	for _, check := range *checks {
 
-		// -- Verbose
-		console.PrintVerbose(fmt.Sprintf("\t\t\t- %s", check.Name))
+		// Replace variables
+		check.Value = ReplaceVarsInCheck(check.Value, vars)
 
-		// -- Replace variables
-		check.Value = ReplaceVars(check.Value, vars)
-
-		// -- Check response code
+		// Check response code
 		if strings.HasPrefix(check.Check, CheckResCode) {
 			err := checkResponseCode(&check, response)
 			if err != nil {
@@ -54,7 +51,7 @@ func RunChecks(checks *[]TestChecks, vars *[]ProjectGlobal, response *resty.Resp
 			}
 		}
 
-		// -- Check response body json
+		// Check response body json
 		if strings.HasPrefix(check.Check, CheckResBodyJSON) {
 			err := checkResponseBodyJSON(&check, response)
 			if err != nil {
@@ -88,8 +85,8 @@ func checkResponseCode(check *TestChecks, response *resty.Response) error {
 func checkResponseBodyJSON(check *TestChecks, response *resty.Response) error {
 
 	// First make sure that response type was json
-	if !strings.Contains(response.Header().Get(HeaderContentType), ContentTypeJSON) {
-		return fmt.Errorf("response '%s' was not a proper content type '%s'", check.Check, ContentTypeJSON)
+	if !strings.Contains(response.Header().Get(http.HeaderContentType), http.ContentTypeJSON) {
+		return fmt.Errorf("response '%s' was not a proper content type '%s'", check.Check, http.ContentTypeJSON)
 	}
 
 	// Scrape the prefix off the selector

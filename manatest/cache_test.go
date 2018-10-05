@@ -1,4 +1,4 @@
-// Package manatest provides the inner workings of go-mana-test.
+// Package manatest provides internal workings for go-mana-test.
 package manatest
 
 // Imports

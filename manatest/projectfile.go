@@ -1,4 +1,4 @@
-// Package manatest provides the inner workings of go-mana-test.
+// Package manatest provides internal workings for go-mana-test.
 package manatest
 
 // Imports
@@ -61,6 +61,14 @@ func ReadProjectFile(pathFile string) (*ProjectFile, error) {
 	// Set path
 	projFile.filePath = pathFile
 
+	// Replace global
+	globals := make([]ProjectGlobal, 0)
+	for _, global := range projFile.Globals {
+		global.Value = ReplaceVarsInGlobal(global.Value)
+		globals = append(globals, global)
+	}
+	projFile.Globals = globals
+
 	return &projFile, nil
 }
 
@@ -69,7 +77,7 @@ func (projFile *ProjectFile) Validate() error {
 
 	// Must have a name
 	if len(projFile.Name) == 0 {
-		return errors.New("roject file must have `name` field")
+		return errors.New("project file must have `name` field")
 	}
 
 	// Must have a tests
