@@ -20,4 +20,4 @@ lint:
 
 ## Perform all tests
 test:
-	go test ./...
+	go test $(go list ./... | grep -v vendor)
