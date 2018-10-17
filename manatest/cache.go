@@ -96,7 +96,7 @@ func cacheBodyJSON(cache *TestCache, response *resty.Response) error {
 	if !jsonValue.Exists() {
 		return fmt.Errorf("Cache '%s' was null", cache.Value)
 	}
-	SetCache(cache.Name, jsonValue.Str)
+	SetCache(cache.Name, jsonValue.String())
 
 	return nil
 }
