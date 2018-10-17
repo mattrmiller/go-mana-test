@@ -11,16 +11,16 @@ import (
 // AppVersion structure handles all things related to the version app.
 type AppVersion struct {
 
-	// cns holds the console structure.
+	// cns stores the console structure.
 	cns *console.Console
 
-	// appVersion holds the application version.
+	// appVersion stores the application version.
 	appVersion string
 
-	// appCommitHash holds the application commit hash.
+	// appCommitHash stores the application commit hash.
 	appCommitHash string
 
-	// appBuildDate holds the application build date.
+	// appBuildDate stores the application build date.
 	appBuildDate string
 }
 

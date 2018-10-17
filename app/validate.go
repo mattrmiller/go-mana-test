@@ -13,10 +13,10 @@ import (
 // AppValidate structure handles all things related to the validation app.
 type AppValidate struct {
 
-	// cns holds the console structure.
+	// cns stores the console structure.
 	cns *console.Console
 
-	// pathProj holds the project path.
+	// pathProj stores the project path.
 	pathProj string
 }
 

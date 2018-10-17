@@ -24,16 +24,16 @@ type ProjectGlobal struct {
 // ProjectFile is a structure to handle a project file.
 type ProjectFile struct {
 
-	// filePath, holds the path to the file.
+	// filePath, stores the path to the file.
 	filePath string
 
-	// Name, holds the name of the test.
+	// Name, stores the name of the test.
 	Name string `yaml:"name"`
 
-	// Tests, holds the paths to tests.
+	// Tests, stores the paths to tests.
 	Tests string `yaml:"tests"`
 
-	// Globals, holds the global variables.
+	// Globals, stores the global variables.
 	Globals []ProjectGlobal `yaml:"globals"`
 }
 

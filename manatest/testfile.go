@@ -49,31 +49,31 @@ type TestCache struct {
 // TestFile is a structure to handle an individual test file.
 type TestFile struct {
 
-	// filePath, holds the path to the file.
+	// filePath, stores the path to the file.
 	filePath string
 
-	// Name, holds the name of the test.
+	// Name, stores the name of the test.
 	Name string `yaml:"name"`
 
 	// Index, hold the index of this test.
 	Index int `yaml:"index"`
 
-	// URL, holds the url of the test.
+	// URL, stores the url of the test.
 	URL string `yaml:"url"`
 
-	// Method, holds the http method of the test.
+	// Method, stores the http method of the test.
 	RequestMethod string `yaml:"request.method"`
 
-	// Headers, holds the header variables.
+	// Headers, stores the header variables.
 	RequestHeaders []TestHeader `yaml:"request.headers"`
 
-	// Body, holds the test http body.
+	// Body, stores the test http body.
 	ReqBody interface{} `yaml:"request.body"`
 
-	// TestChecks, holds the checks variables.
+	// TestChecks, stores the checks variables.
 	Checks []TestChecks `yaml:"checks"`
 
-	// Cache, holds the cache variables.
+	// Cache, stores the cache variables.
 	Cache []TestCache `yaml:"cache"`
 }
 

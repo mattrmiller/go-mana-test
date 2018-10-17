@@ -18,19 +18,19 @@ import (
 // AppTest structure handles all things related to the test app.
 type AppTest struct {
 
-	// cns holds the console structure.
+	// cns stores the console structure.
 	cns *console.Console
 
-	// pathProj holds the project path.
+	// pathProj stores the project path.
 	pathProj string
 
-	// optBodies holds the options to output HTTP bodies.
+	// optBodies stores the options to output HTTP bodies.
 	optBodies bool
 
-	// optExit holds the options to hault on failed tests.
+	// optExit stores the options to hault on failed tests.
 	optExit bool
 
-	// optResTimes holds the options to calculate response times.
+	// optResTimes stores the options to calculate response times.
 	optResTimes bool
 }
 
