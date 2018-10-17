@@ -99,7 +99,7 @@ func checkResponseBodyJSON(check *TestChecks, response *resty.Response) error {
 	if !jsonValue.Exists() {
 		return fmt.Errorf("check '%s' wanted '%s' != received 'null'", check.Check, check.Value)
 	}
-	if jsonValue.Str != check.Value {
+	if jsonValue.String() != check.Value {
 		return fmt.Errorf("check '%s' wanted '%s' != received '%s'", check.Check, check.Value, jsonValue.String())
 	}
 
