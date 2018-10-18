@@ -9,6 +9,7 @@ import (
 	"github.com/mattrmiller/go-mana-test/http"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	"net/url"
 	"path/filepath"
 	"strings"
 )
@@ -20,6 +21,16 @@ type TestHeader struct {
 	Key string `yaml:"key"`
 
 	// Value, hold the value of the header.
+	Value string `yaml:"value"`
+}
+
+// TestParams is a structure to handle params for a test.
+type TestParams struct {
+
+	// Key, hold the key of the param.
+	Key string `yaml:"key"`
+
+	// Value, hold the value of the param.
 	Value string `yaml:"value"`
 }
 
@@ -60,6 +71,9 @@ type TestFile struct {
 
 	// URL, stores the url of the test.
 	URL string `yaml:"url"`
+
+	// Parms, key/val params to be attached to the URL
+	Params []TestParams `yaml:"params"`
 
 	// Method, stores the http method of the test.
 	RequestMethod string `yaml:"request.method"`
@@ -158,6 +172,20 @@ func (testFile *TestFile) Validate() error {
 		}
 	}
 
+	// Validate params
+	for _, param := range testFile.Params {
+
+		// Key
+		if len(param.Key) == 0 {
+			return errors.New("test file param must have 'key' field")
+		}
+
+		// Value
+		if len(param.Value) == 0 {
+			return errors.New("test file param must have 'value' field")
+		}
+	}
+
 	// Validate checks
 	for _, check := range testFile.Checks {
 
@@ -215,9 +243,21 @@ func (testFile *TestFile) MakeTestHeaders(projFile *ProjectFile) []TestHeader {
 	return headers
 }
 
-// MaketestURL Prepares HTTP URL for the test but replacing necessary variables.
+// MakeTestURL Prepares HTTP URL for the test but replacing necessary variables.
 func (testFile *TestFile) MakeTestURL(projFile *ProjectFile) string {
-	return ReplaceVarsInTestURL(testFile.URL, &projFile.Globals)
+	v := url.Values{}
+	for key, value := range testFile.Params {
+		key = ReplaceVarsInHeader(key, &projFile.Globals)
+		value = ReplaceVarsInHeader(value, &projFile.Globals)
+		v.Set(key, value)
+	}
+
+	url := ReplaceVarsInTestURL(testFile.URL, &projFile.Globals)
+	if len(v) != 0 {
+		url = url + "?" + v.Encode()
+	}
+
+	return url
 }
 
 // GetPath Gets the path of the test file.

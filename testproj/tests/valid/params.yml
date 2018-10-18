@@ -1,0 +1,14 @@
+name: Simple Api Example File
+url: http://api.slack.com
+params:
+  - key: search
+    value: "params errywhere"
+  - key: sort
+    value: asc
+request.method: GET
+index: 100
+request.headers:
+  - key: User-Agent
+    value: go-mana-test
+  - key: Content-Type
+    value: application/json
