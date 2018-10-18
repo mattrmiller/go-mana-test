@@ -1,10 +1,8 @@
 name: Simple Api Example File
 url: http://api.slack.com
 params:
-  - key: search
-    value: "params errywhere"
-  - key: sort
-    value: asc
+  search: "params errywhere"
+  sort: asc
 request.method: GET
 index: 100
 request.headers:

@@ -24,16 +24,6 @@ type TestHeader struct {
 	Value string `yaml:"value"`
 }
 
-// TestParams is a structure to handle params for a test.
-type TestParams struct {
-
-	// Key, hold the key of the param.
-	Key string `yaml:"key"`
-
-	// Value, hold the value of the param.
-	Value string `yaml:"value"`
-}
-
 // TestChecks is a structure to handle checks for a test.
 type TestChecks struct {
 
@@ -73,7 +63,7 @@ type TestFile struct {
 	URL string `yaml:"url"`
 
 	// Parms, key/val params to be attached to the URL
-	Params []TestParams `yaml:"params"`
+	Params map[string]string `yaml:"params"`
 
 	// Method, stores the http method of the test.
 	RequestMethod string `yaml:"request.method"`
@@ -173,15 +163,13 @@ func (testFile *TestFile) Validate() error {
 	}
 
 	// Validate params
-	for _, param := range testFile.Params {
-
-		// Key
-		if len(param.Key) == 0 {
+	for key, value := range testFile.Params {
+		if len(key) == 0 {
 			return errors.New("test file param must have 'key' field")
 		}
 
 		// Value
-		if len(param.Value) == 0 {
+		if len(value) == 0 {
 			return errors.New("test file param must have 'value' field")
 		}
 	}
