@@ -2,4 +2,4 @@ name: Simple Api Example File
 url: http://api.slack.com
 request.method: GET
 params:
-  Content-Type: ""
+  "":

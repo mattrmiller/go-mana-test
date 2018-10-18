@@ -163,14 +163,9 @@ func (testFile *TestFile) Validate() error {
 	}
 
 	// Validate params
-	for key, value := range testFile.Params {
+	for key := range testFile.Params {
 		if len(key) == 0 {
 			return errors.New("test file param must have 'key' field")
-		}
-
-		// Value
-		if len(value) == 0 {
-			return errors.New("test file param must have 'value' field")
 		}
 	}
 

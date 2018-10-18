@@ -3,6 +3,7 @@ url: http://api.slack.com
 params:
   search: "params errywhere"
   sort: asc
+  nocookie:
 request.method: GET
 index: 100
 request.headers:
