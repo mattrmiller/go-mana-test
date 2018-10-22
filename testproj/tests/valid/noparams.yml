@@ -1,10 +1,5 @@
 name: Simple Api Example File
 url: http://api.slack.com
-params:
-  locale: "{{globals.LOCALE}}"
-  search: "params errywhere"
-  sort: asc
-  nocookie:
 request.method: GET
 index: 100
 request.headers:

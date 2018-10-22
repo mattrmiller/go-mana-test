@@ -1,5 +1,7 @@
 name: Simple Api Example File
 url: http://api.slack.com
+params:
+  search: "gopher"
 request.method: GET
 index: 100
 request.headers:

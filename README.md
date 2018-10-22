@@ -33,7 +33,8 @@ See the [Contributing Guide](/CONTRIBUTING.md) for steps on how to contribute to
 [Matthew R. Miller](https://github.com/mattrmiller)
 
 ## Contributors
-[Matthew R. Miller](https://github.com/mattrmiller)
+- [Matthew R. Miller](https://github.com/mattrmiller)
+- [Adam Jahnke](https://github.com/adamyonk)
 
 ## License
 [MIT License](LICENSE)
