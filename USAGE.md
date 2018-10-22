@@ -73,6 +73,8 @@ tests: ./tests
 globals:
   - key: USER_AGENT
     value: go-mana-test
+  - key: LOCALE
+    value: en_us
 ```
  - name: Defines the name of your project.
  - tests: Defines the path to your [test files](#test-file), relative to the path this project file is in.
@@ -84,6 +86,8 @@ The test file defines a single test for your project. Here is an example of a te
 name: Update User Profile
 index: 100
 url: "https://api.sample.com/v1/profile"
+params:
+  search: "gopher"
 request.method: POST
 request.headers:
   - key: Content-Type
@@ -105,29 +109,40 @@ checks:
 ```
  - name: Defines the name of your test.
  - url: Defines the URL to use in the test. This may make use of [variables](#variables).
+ - params: Defines the parame for the URL query string. This may make use of [variables](#variables).
  - method: Defines the HTTP method to use for the test.
  - index: Defines the index of the test. Lower value indexes will be run before higher value indexes.
  - request.headers: Defines the HTTP headers to send in the test in key/value format.
  - request.body: Defines the body to send in the test. If you are sending JSON [https://www.json2yaml.com](https://www.json2yaml.com/) is a nice tool to help you convert JSON to YAML.
  - cache: Defines [cache](#cache) to save from this test.
  - checks: Defines the [checks](#test-checks) to validate in this test.
- 
+
+## Params
+The `params` field takes an object that will get mapped to the URL query string. Values will be escaped using [`net/url` Values](https://golang.org/pkg/net/url/#example_Values). For example, given this abbreviated test file:
+```
+url: "https://api.sample.com/v1/profile"
+params:
+  search: "gopher con"
+method: GET
+```
+A GET request would be sent to `https://api.sample.com/v1/profile?search=gopher+con`.
+
 ## Test Cache
 Test cache is run before the [test checks][#test-checks]. Caching allows you to cache certain values that can cary onto the checks in your test file, or across all test files.
 
-The test cache uses key/value methods to store data. 
+The test cache uses key/value methods to store data.
 
  - name: Defines the name of your cache. Can be any string.
  - value: Defines the value to cache. Can be any of the following:
    - response.body.json: Refers the json body of the response. Anything following this prefix this will [query methods of the json](#json-query) body.
 
 ## Test Checks
-Test checks are used to validate results of the test. 
+Test checks are used to validate results of the test.
 
- - name: Defines the name of your test. Can be any string. 
+ - name: Defines the name of your test. Can be any string.
  - check: Defines the check to use. Can be any of the following:
    - response.code: References response HTTP status code.
-   - response.body.json: Refers the json body of the response. Anything following this prefix this will [query methods of the json](#json-query) body. 
+   - response.body.json: Refers the json body of the response. Anything following this prefix this will [query methods of the json](#json-query) body.
  - value: Defines the value to use in the test. This may make use of [variables](#variables).
 
 ## Variables
@@ -157,7 +172,7 @@ For the sample [project file](#project-file) above, referencing the User Agent w
 #### Cache
 Cache variables are defined in the [test file](#test-cache). The full syntax is:
 ```yaml
-"{{cache.MY_CACHE_VARIABLE}}" 
+"{{cache.MY_CACHE_VARIABLE}}"
 ```
 Can be used in:
  - Test URL
@@ -173,7 +188,7 @@ For the sample [test file](#test-file) above, referencing the Username would be:
 #### Environment Variables
 Environment variables are defined on your Operating System. The full syntax is:
 ```yaml
-"{{env.MY_ENV_VARIABLE}}" 
+"{{env.MY_ENV_VARIABLE}}"
 ```
 Can be used in:
  - Project globals

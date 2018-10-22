@@ -1,10 +1,14 @@
 name: Simple Api Example File
-url: "http://{{globals.HOST}.slack.com"
+url: http://api.slack.com
 params:
   locale: "{{globals.LOCALE}}"
+  search: "params errywhere"
+  sort: asc
+  nocookie:
 request.method: GET
+index: 100
 request.headers:
   - key: User-Agent
     value: go-mana-test
-  - key: User-Agent-2
-    value: "{{globals.USER_AGENT}"
+  - key: Content-Type
+    value: application/json

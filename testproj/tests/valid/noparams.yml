@@ -1,7 +1,5 @@
 name: Simple Api Example File
 url: http://api.slack.com
-params:
-  search: "gopher"
 request.method: GET
 index: 100
 request.headers:
@@ -9,5 +7,3 @@ request.headers:
     value: go-mana-test
   - key: Content-Type
     value: application/json
-request.body:
-  name: John Doe
