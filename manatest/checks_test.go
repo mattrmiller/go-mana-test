@@ -14,6 +14,7 @@ func TestValidateCheck(tst *testing.T) {
 	checks := []string{
 		"response.code",
 		"response.body.json",
+		"response.body.json.{{cache.something}}",
 	}
 	for _, check := range checks {
 		valid := ValidateCheck(&check)
@@ -26,6 +27,7 @@ func TestValidateCheck(tst *testing.T) {
 		"1323423423",
 		"FLKDKDKS@",
 		"ddddsdfsd",
+		"response.{{cache.something}}.json",
 	}
 	for _, check := range checks {
 		valid := ValidateCheck(&check)

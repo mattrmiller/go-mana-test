@@ -41,6 +41,7 @@ func RunChecks(checks *[]TestChecks, vars *[]ProjectGlobal, response *resty.Resp
 	for _, check := range *checks {
 
 		// Replace variables
+		check.Check = ReplaceVarsInCheck(check.Check, vars)
 		check.Value = ReplaceVarsInCheck(check.Value, vars)
 
 		// Check response code

@@ -106,6 +106,9 @@ checks:
   - name: Proper body for updated username
     check: response.body.json.username
     value: "{{cache.body.username}}"
+  - name: Has fav ID
+    check: response.body.json.favs.#[id=="{{cache.body.fav_id}}"].id
+    value: "{{cache.body.fav_id}}"
 ```
  - name: Defines the name of your test.
  - url: Defines the URL to use in the test. This may make use of [variables](#variables).
@@ -142,7 +145,7 @@ Test checks are used to validate results of the test.
  - name: Defines the name of your test. Can be any string.
  - check: Defines the check to use. Can be any of the following:
    - response.code: References response HTTP status code.
-   - response.body.json: Refers the json body of the response. Anything following this prefix this will [query methods of the json](#json-query) body.
+   - response.body.json: Refers the json body of the response. Anything following this prefix will [query methods of the json](#json-query) body, and may make use of [variables](#variables).
  - value: Defines the value to use in the test. This may make use of [variables](#variables).
 
 ## Variables
