@@ -8,3 +8,4 @@ Below are items on the official TO DO list, that will be implemented.
  - checks variable types
  - Remove pass by pointer
  - Move to Go mod, 1.11
+ - Make resty.SetTLSClientConfig(&tls.Config{ InsecureSkipVerify: true }) optional inside of project

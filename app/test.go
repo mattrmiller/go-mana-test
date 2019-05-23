@@ -4,15 +4,17 @@ package app
 // Imports
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"github.com/mattrmiller/go-mana-test/console"
-	"github.com/mattrmiller/go-mana-test/manatest"
-	"gopkg.in/resty.v1"
 	"net/http"
 	"os"
 	"path"
 	"time"
+
+	"github.com/mattrmiller/go-mana-test/console"
+	"github.com/mattrmiller/go-mana-test/manatest"
+	"gopkg.in/resty.v1"
 )
 
 // AppTest structure handles all things related to the test app.
@@ -103,6 +105,7 @@ func (app *AppTest) Run() {
 
 		// Prepare resty client
 		resty.SetDebug(false)
+		resty.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 		client := resty.NewRequest().
 			SetContentLength(true)
 		for _, header := range testHeaders {
